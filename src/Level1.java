@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -7,7 +8,8 @@ import javax.swing.JPanel;
 
 public class Level1 extends JPanel
 {
-	private Rectangle floor;
+	private Rectangle safeFloor;
+	private Lava lava;
 	private Platform platform1;
 	private Platform platform2;
 	private Platform platform3;
@@ -17,7 +19,6 @@ public class Level1 extends JPanel
 	private Platform platform7;
 	private Platform platform8;
 	private Platform platform9;
-	private Rectangle rect;
 	private Hero hero;
 	
 	public Level1()
@@ -27,8 +28,8 @@ public class Level1 extends JPanel
 		box.setSize(100, 100);
 		add(box);
 		
-		floor = new Rectangle(0,630, 1280, 90);
-		
+		safeFloor = new Rectangle(0,630, 150, 90);
+		lava = new Lava(150,630, 1130, 90);
 		platform1 = new Platform(150, 550, 200, 25);
 		platform2 = new Platform(430, 500, 200, 25);
 		platform3 = new Platform(710, 450, 200, 25);
@@ -54,7 +55,7 @@ public class Level1 extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
-		g2.fill(floor);
+		g2.fill(safeFloor);
 		g2.fill(platform1);
 		g2.fill(platform2);
 		g2.fill(platform3);
@@ -67,5 +68,7 @@ public class Level1 extends JPanel
 			g2.fill(platform8);
 			g2.fill(platform9);
 		}
+		g2.setColor(Color.red);
+		g2.fill(lava);
 	}
 }
