@@ -34,4 +34,17 @@ public class Hero extends JComponent
 		g2.fill(leftLeg);
 		g2.fill(rightLeg);
 	}
+	
+	public void setDx(int x)
+	{
+		dX=x;
+	}
+	public void setDy(int y)
+	{
+		dY=y;
+	}
+	public void update()
+	{
+		setLocation((int)getX()+dX, (int)getY()+dY);
+	}
 }

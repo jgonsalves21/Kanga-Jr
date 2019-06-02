@@ -16,7 +16,6 @@ public class Level2 extends JPanel
 	private Walls wall1;
 	private Walls wall2;
 	private Walls wall3;
-	
 	private Platform platform1;
 	private Platform platform2;
 	private Platform platform3;
@@ -31,8 +30,6 @@ public class Level2 extends JPanel
 	private Platform platform12;
 	private Platform platform13;
 	private Platform platform14;
-	private Platform platform15;
-	private Platform platform16;
 	
 	private Hero hero;
 	
@@ -51,8 +48,6 @@ public class Level2 extends JPanel
 		lava = new Lava(100,630, 1280, 90);
 		wall1 = new Walls(275, 110, 25, 610);
 		
-		
-		
 		platform1 = new Platform(225, 580, 60, 20);
 		platform2 = new Platform(0, 500, 60, 20);
 		platform3 = new Platform(225, 420, 60, 20);
@@ -60,6 +55,7 @@ public class Level2 extends JPanel
 		platform5 = new Platform(225, 260, 60, 20);
 		platform6 = new Platform(0, 180, 60, 20);
 		platform7 = new Platform(255, 100, 60, 10);
+		
 		if (platform7.isTouched(hero))
 		{
 			platform8 = new Platform(425, 580, 100, 20);

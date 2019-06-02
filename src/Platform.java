@@ -7,11 +7,16 @@ import javax.swing.JLabel;
 
 public class Platform extends Rectangle
 {
+	private int dX;
+	private int dY;
+	
 	
 	public Platform(int x,int y,int l,int w)
 	{
 		setLocation(x,y);
 		setSize(l, w);
+		dX=0;
+		dY=0;
 	}
 	
 	public boolean isTouched(Hero hero)
@@ -30,5 +35,18 @@ public class Platform extends Rectangle
 			}
 		}
 		return false;
+	}
+	
+	public void setDx(int x)
+	{
+		dX=x;
+	}
+	public void setDy(int y)
+	{
+		dY=y;
+	}
+	public void update()
+	{
+		setLocation((int)getX()+dX, (int)getY()+dY);
 	}
 }
