@@ -29,7 +29,7 @@ public class Level1 extends JPanel
 		add(box);
 		
 		safeFloor = new Rectangle(0,630, 150, 90);
-		lava = new Lava(150,630, 1130, 90);
+		lava = new Lava(150,630, 1280, 90);
 		platform1 = new Platform(150, 550, 200, 25);
 		platform2 = new Platform(430, 500, 200, 25);
 		platform3 = new Platform(710, 450, 200, 25);
