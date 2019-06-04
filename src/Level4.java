@@ -14,11 +14,6 @@ public class Level4  extends JPanel{
 	private Platform platform2;
 	private Platform platform3;
 	private Platform platform4;
-	private Platform platform5;
-	private Platform platform6;
-	private Platform platform7;
-	private Platform platform8;
-	private Platform platform9;
 	private Hero hero;
 	private Walls wall1;
 	
@@ -33,14 +28,15 @@ public class Level4  extends JPanel{
 		hero.setBounds(255,10,50,90);
 		add(hero);
 		
-		safeFloor = new Rectangle(0,630, 300, 90);
+		safeFloor = new Rectangle(0,630, 330, 90);
+		wall1 = new Walls(300,430,30,200);
 	}
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.fill(safeFloor);
+		g2.fill(wall1);
 		
-		g2.setColor(Color.red);
-		//g2.fill(lava);
+	
 	}
 }
