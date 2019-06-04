@@ -100,7 +100,6 @@ public class Master extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		revalidate();
 		repaint();
 		
 	}
