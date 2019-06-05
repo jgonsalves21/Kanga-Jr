@@ -30,12 +30,17 @@ public class Level4  extends JPanel{
 		
 		safeFloor = new Rectangle(0,630, 330, 90);
 		wall1 = new Walls(300,430,30,200);
+		platform1 = new Platform(530, 300, 20, 20);
+		lava = new Lava(330,630,400,90);
 	}
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.fill(safeFloor);
 		g2.fill(wall1);
+		g2.fill(platform1);
+		g2.setColor(Color.red);
+		g2.fill(lava);
 		
 	
 	}
