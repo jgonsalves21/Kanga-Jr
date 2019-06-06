@@ -16,6 +16,8 @@ public class Level4  extends JPanel{
 	private Platform platform3;
 	private Platform platform4;
 	private Platform platform5;
+	private Platform platform6;
+	private Platform platform7;
 	private Hero hero;
 	private Walls wall1;
 	private Walls wall2;
@@ -39,8 +41,9 @@ public class Level4  extends JPanel{
 		wall2 = new Walls(700,430,30,230);
 		lava2 = new Lava(815,630,350,90);
 		platform3 = new Platform(1165,630,200,90);
-		platform4 = new Platform(700,225,450,20);
+		platform4 = new Platform(700,225,200,20);
 		platform5 = new Platform(375,500,275,20);
+		platform7 = new Platform(1165,500,200,20);
 		
 	}
 	public void paintComponent(Graphics g)
@@ -53,7 +56,9 @@ public class Level4  extends JPanel{
 		g2.fill(wall2);
 		g2.fill(platform3);
 		g2.fill(platform5);
-		if(platform3.isTouched(hero)) g2.fill(platform4);
+		g2.fill(platform4);
+		g2.fill(platform6);
+		g2.fill(platform7);
 		g2.setColor(Color.red);
 		g2.fill(lava);
 		g2.fill(lava2);
