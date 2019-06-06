@@ -9,7 +9,7 @@ public class Platform extends Rectangle
 {
 	private int dX;
 	private int dY;
-	
+	private int direction;
 	
 	public Platform(int x,int y,int l,int w)
 	{
@@ -17,6 +17,7 @@ public class Platform extends Rectangle
 		setSize(l, w);
 		dX=0;
 		dY=0;
+		direction=1;
 	}
 	
 	public boolean isTouched(Hero hero)
@@ -45,8 +46,11 @@ public class Platform extends Rectangle
 	{
 		dY=y;
 	}
+	
 	public void update()
 	{
+		
 		setLocation((int)getX()+dX, (int)getY()+dY);
 	}
+	
 }
