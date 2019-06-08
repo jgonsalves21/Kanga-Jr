@@ -4,6 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
@@ -13,13 +14,17 @@ import javax.swing.JComponent;
 public class Bullets extends JComponent
 {
 	private Ellipse2D.Double circle;
-	private int dX, dY;
+	private int dX, dY, startX, startY;
+	private Point mouseLocation;
 	
-	public Bullets()
+	public Bullets(int sX, int sY, Point mL)
 	{
 		circle = new Ellipse2D.Double(0,0,10, 10);
 		dX=0;
-		dY=0;
+		dY=-5;
+		startX=sX;
+		startY=sY;
+		mouseLocation=mL;
 	}
 	public void paintComponent(Graphics g)
 	{
@@ -38,7 +43,10 @@ public class Bullets extends JComponent
 	}
 	public void shoot()
 	{
-		setLocation((int)getX()+dX, (int)getY()+dY);
+		if (mouseLocation.getX()>startX)
+			setLocation(getX()+5, getY());
+		else
+			setLocation(getX()-5, getY());
 	}
 	
 
