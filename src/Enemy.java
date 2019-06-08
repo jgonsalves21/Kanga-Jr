@@ -18,6 +18,7 @@ public class Enemy extends JComponent
 	private Rectangle head, leg1, leg2, leg3, eye1, eye2;
 	private int dX, dY, leftBound, rightBound;
 	private int direction;
+	private boolean isAlive;
 	
 	public Enemy(int left, int right)
 	{
@@ -30,6 +31,7 @@ public class Enemy extends JComponent
 		leftBound=left;
 		rightBound=right;
 		direction=1;
+		isAlive=true;
 	}
 	
 	public void paintComponent(Graphics g)
@@ -106,6 +108,14 @@ public class Enemy extends JComponent
 	{
 		setLocation((int)getX()+dX, (int)getY()+dY);
 	}
-	
+	public void Kill()
+	{
+		isAlive=false;
+	}
+	public boolean lifeStatus()
+	{
+		return isAlive;
+	}
 
 }
+
