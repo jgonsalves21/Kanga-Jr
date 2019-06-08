@@ -62,11 +62,15 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 		imap.put(left, "moveL");
 		KeyStroke space = KeyStroke.getKeyStroke(' ');
 		imap.put(space, "shoot");
+		KeyStroke up = KeyStroke.getKeyStroke('w');
+		imap.put(up, "moveU");
+		KeyStroke down = KeyStroke.getKeyStroke('s');
+		imap.put(down, "moveD");
 		
 		timer = new Timer(16, this);
 		timer.start();
 		hero = new Hero();
-		hero.setBounds(350, 550, 50, 90);
+		hero.setBounds(350, 50, 50, 90);
 		add(hero);
 		addEnemies();
 		addPlatforms();
@@ -190,23 +194,52 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 		for(Bullets bullet: bullets)
 		{
 			bullet.shoot();
+			
 		}
 		
 		for (Enemy enemy: enemies)
 		{
-			for (Bullets bullet: bullets)
+			for(Bullets bullet : bullets)
 			{
-				if(enemy.isShot(bullet))
+				if (enemy.isShot(bullet))
 				{
-					JLabel gameOver = new JLabel("Game Over");
-					gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-					gameOver.setBounds(250, 50, 400, 200);
-					add(gameOver);
-					timer.stop();
+					remove(enemy);
+					remove(bullet);
+					enemy.Kill();
+					break;
 				}
 			}
+			if (enemy.isTouched(hero))
+			{
+				JLabel gameOver = new JLabel("Game Over");
+				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+				gameOver.setBounds(250, 50, 400, 200);
+				add(gameOver);
+				timer.stop();
+			}
+			
 		}
-		
+		for (int i= enemies.size()-1; i>=0; i--)
+		{
+			if(!enemies.get(i).lifeStatus())
+				enemies.remove(i);
+		}
+		if(enemies.isEmpty())
+		{
+			JLabel gameOver = new JLabel("YOU WON!");
+			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+			gameOver.setBounds(250, 50, 400, 200);
+			add(gameOver);
+			timer.stop();
+		}
+		if(lava.isTouched(hero))
+		{
+			JLabel gameOver = new JLabel("Game Over");
+			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+			gameOver.setBounds(250, 50, 400, 200);
+			add(gameOver);
+			timer.stop();
+		}
 		hero.update();
 		platform5.update();
 		repaint(platform5);
@@ -222,5 +255,6 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 	
 
 }
+
 
 
