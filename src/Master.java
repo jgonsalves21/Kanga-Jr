@@ -1,19 +1,33 @@
 
+
+import javax.swing.ActionMap;
+
+import javax.swing.InputMap;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import java.awt.CardLayout;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 
 
 public class Master extends JFrame implements ActionListener
 {
+	Hero hero = new Hero();
 	public Master()
 	{
 		//Initial Setup
@@ -22,6 +36,7 @@ public class Master extends JFrame implements ActionListener
 		JPanel overall = new JPanel();
 		overall.setLayout(cl);
 		setLayout(cl);
+		setFocusable(true);
 		Timer timer = new Timer(500, this);
 		
 		//JMenu Info
@@ -34,8 +49,6 @@ public class Master extends JFrame implements ActionListener
 		levels.add(level2);
 		JMenuItem level3 = new JMenuItem("Level 3");
 		levels.add(level3);
-		JMenuItem level4 = new JMenuItem("Level 4");
-		levels.add(level4);
 		
 		//CardLayout Info
 		Level1 lvl1 = new Level1();
@@ -44,8 +57,7 @@ public class Master extends JFrame implements ActionListener
 		overall.add(lvl2, "level 2");
 		Level3 lvl3 = new Level3();
 		overall.add(lvl3, "level 3");
-		Level4 lvl4 = new Level4();
-		overall.add(lvl4, "leevel 4");
+		lvl3.setFocusable(true);
 		
 		// Action Listeners
 		level1.addActionListener(new ActionListener() 
@@ -56,6 +68,7 @@ public class Master extends JFrame implements ActionListener
 			{
 				cl.show(overall, "level 1");
 				add(overall);
+				
 				
 			}
 			
@@ -70,18 +83,6 @@ public class Master extends JFrame implements ActionListener
 				cl.show(overall, "level 2");
 				add(overall);
 				
-			}
-			
-		});
-		
-		level3.addActionListener(new ActionListener() 
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				cl.show(overall, "level 3");
-				add(overall);
 				
 			}
 			
@@ -91,9 +92,17 @@ public class Master extends JFrame implements ActionListener
 		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) 
+			public void actionPerformed(ActionEvent e) 
 			{
-				cl.show(overall, "level 4");
+				
+				ActionMap amap = lvl3.getActionMap();
+				MoveRight moveR = new MoveRight(lvl3);
+				amap.put("moveR", moveR);
+				MoveLeft moveL = new MoveLeft(lvl3);
+				amap.put("moveL", moveL);
+				Shoot shoot = new Shoot(lvl3);
+				amap.put("shoot", shoot);
+				cl.show(overall, "level 3");
 				add(overall);
 				
 			}
@@ -117,9 +126,61 @@ public class Master extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		revalidate();
 		repaint();
 		
+	}
+	
+	class MoveRight extends AbstractAction
+	{
+		Levels level;
+		public MoveRight(Levels lvl)
+		{
+			level=lvl;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			level.getHero().setDx(5);
+			
+		}
+
+	}
+	class MoveLeft extends AbstractAction
+	{
+		Levels level;
+		public MoveLeft(Levels lvl)
+		{
+			level=lvl;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			level.getHero().setDx(-5);
+			
+		}
+
+	}
+	class Shoot extends AbstractAction
+	{
+		Levels level;
+		public Shoot(Levels lvl)
+		{
+			level=lvl;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+				Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+				Bullets nbullet = new Bullets(level.getHero().getX()+25, level.getHero().getY()+45, mouseLocation);
+				nbullet.setBounds(level.getHero().getX()+25, level.getHero().getY()+45, 10, 10);
+				level.getBullets().add(nbullet);
+				level.add(nbullet);
+			
+		}
+
 	}
 
 }
