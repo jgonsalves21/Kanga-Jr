@@ -1,5 +1,4 @@
 
-
 import javax.swing.ActionMap;
 
 import javax.swing.InputMap;
@@ -37,7 +36,7 @@ public class Master extends JFrame implements ActionListener
 		overall.setLayout(cl);
 		setLayout(cl);
 		setFocusable(true);
-		Timer timer = new Timer(500, this);
+
 		
 		//JMenu Info
 		JMenuBar menubar = new JMenuBar();
@@ -102,6 +101,10 @@ public class Master extends JFrame implements ActionListener
 				amap.put("moveL", moveL);
 				Shoot shoot = new Shoot(lvl3);
 				amap.put("shoot", shoot);
+				MoveUp moveU = new MoveUp(lvl3);
+				amap.put("moveU", moveU);
+				MoveDown moveD = new MoveDown(lvl3);
+				amap.put("moveD", moveD);
 				cl.show(overall, "level 3");
 				add(overall);
 				
@@ -128,6 +131,38 @@ public class Master extends JFrame implements ActionListener
 	{
 		repaint();
 		
+	}
+	class MoveUp extends AbstractAction
+	{
+		Levels level;
+		public MoveUp(Levels lvl)
+		{
+			level=lvl;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			level.getHero().setDy(-5);
+			
+		}
+
+	}
+	class MoveDown extends AbstractAction
+	{
+		Levels level;
+		public MoveDown(Levels lvl)
+		{
+			level=lvl;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			level.getHero().setDy(5);
+			
+		}
+
 	}
 	
 	class MoveRight extends AbstractAction
@@ -184,3 +219,5 @@ public class Master extends JFrame implements ActionListener
 	}
 
 }
+
+
