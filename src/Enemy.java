@@ -16,10 +16,10 @@ import javax.swing.JComponent;
 public class Enemy extends JComponent
 {
 	private Rectangle head, leg1, leg2, leg3, eye1, eye2;
-	private int dX, dY;
+	private int dX, dY, leftBound, rightBound;
 	private int direction;
 	
-	public Enemy()
+	public Enemy(int left, int right)
 	{
 		head = new Rectangle(0, 0, 24, 24);
 		leg1 = new Rectangle(0, 24, 6, 6);
@@ -27,8 +27,9 @@ public class Enemy extends JComponent
 		leg3 = new Rectangle(18, 24, 6, 6);
 		eye1 = new Rectangle(6, 6, 4, 4);
 		eye2 = new Rectangle(14, 6, 4, 4);
+		leftBound=left;
+		rightBound=right;
 		direction=1;
-		
 	}
 	
 	public void paintComponent(Graphics g)
@@ -85,9 +86,26 @@ public class Enemy extends JComponent
 		}
 		return false;
 	}
+	public void changeDirection()
+	{
+		direction*=-1;
+	}
+	public int getDirection()
+	{
+		return direction;
+	}
+	public int getLeft()
+	{
+		return leftBound;
+	}
+	public int getRight()
+	{
+		return rightBound;
+	}
 	public void update()
 	{
 		setLocation((int)getX()+dX, (int)getY()+dY);
 	}
+	
 
 }
