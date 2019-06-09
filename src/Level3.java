@@ -36,7 +36,7 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 	private Platform platform13;
 	private int num1 =1;
 	private Hero hero;
-	private Rectangle safeFloor;
+	private Platform safeFloor;
 	private Walls wall1;
 	private Lava lava;
 	private ArrayList<Bullets> bullets = new ArrayList<Bullets>();
@@ -47,13 +47,27 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 	private Enemy enemy5;
 	private Timer timer;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	
 	public Level3()
 	{
 		this.setLayout(null);
 		this.setFocusable(true);
 		this.requestFocusInWindow();
+		keySensing();
+	
 		
+		timer = new Timer(16, this);
+		timer.start();
+		hero = new Hero();
+		hero.setBounds(1, 25, 50, 80);
+		add(hero);
+		addEnemies();
+		addPlatforms();
+		
+	}
+	public void keySensing()
+	{
 		int mapName = WHEN_IN_FOCUSED_WINDOW;
 		InputMap imap= getInputMap(mapName);
 		KeyStroke right = KeyStroke.getKeyStroke('d');
@@ -66,17 +80,8 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 		imap.put(up, "moveU");
 		KeyStroke down = KeyStroke.getKeyStroke('s');
 		imap.put(down, "moveD");
-		
-		timer = new Timer(16, this);
-		timer.start();
-		hero = new Hero();
-		hero.setBounds(350, 50, 50, 90);
-		add(hero);
-		addEnemies();
-		addPlatforms();
-		
-		
-		
+		KeyStroke reset = KeyStroke.getKeyStroke('r');
+		imap.put(reset, "reset");
 	}
 	
 	public void paintComponent(Graphics g)
@@ -87,7 +92,6 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 		g2.fill(platform2);
 		g2.fill(platform3);
 		g2.fill(platform4);
-		g2.fill(platform5);
 		g2.fill(platform6);
 		g2.fill(platform7);
 		g2.fill(platform8);
@@ -100,27 +104,43 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 		g2.fill(safeFloor);
 		g2.setColor(Color.red);
 		g2.fill(lava);
+		g2.setColor(Color.blue);
+		g2.fill(platform5);
 		
 	}
 	public void addPlatforms()
 	{
 		platform1 = new Platform(0, 110, 60, 20);
 		platform2 = new Platform(140, 300, 60, 20);
-		platform3 = new Platform(200, 550, 60, 20);
+		platform3 = new Platform(200, 600, 60, 20);
 		platform4 = new Platform(350, 510, 60, 20);
 		platform5 = new Platform(300, 300, 60, 20);
 		platform6 = new Platform(500, 510, 60, 20);
-		platform7 = new Platform(650, 550, 60, 20);
-		platform8 = new Platform(950, 550, 60, 20);
+		platform7 = new Platform(650, 580, 60, 20);
+		platform8 = new Platform(950, 580, 60, 20);
 		platform9 = new Platform(1210, 500, 60, 20);
 		platform10 = new Platform(1100, 400, 60, 20);
 		platform11 = new Platform(950, 300, 60, 20);
 		platform12 = new Platform(800, 200, 60, 20);
 		platform13 = new Platform(650, 100, 60, 20);
+		platforms.add(platform1);
+		platforms.add(platform2);
+		platforms.add(platform3);
+		platforms.add(platform4);
+		platforms.add(platform5);
+		platforms.add(platform6);
+		platforms.add(platform7);
+		platforms.add(platform8);
+		platforms.add(platform9);
+		platforms.add(platform10);
+		platforms.add(platform11);
+		platforms.add(platform12);
+		platforms.add(platform13);
 		
 		wall1 = new Walls(200, 0, 20, 400);
-		lava = new Lava(100, 400, 1000, 20);
-		safeFloor = new Rectangle(0,640, 1280, 20);
+		lava = new Lava(150, 400, 950, 20);
+		safeFloor = new Platform(0,640, 1280, 20);
+		
 	}
 	public void addEnemies()
 	{
@@ -175,28 +195,61 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 	{
 		return bullets;
 	}
-	
-	public void actionPerformed(ActionEvent e) 
+	public void checkBounds()
 	{
-		
-		movePlatform(platform5);
-		moveEnemy(enemy1);
-		enemy1.update();
-		moveEnemy(enemy2);
-		enemy2.update();
-		moveEnemy(enemy3);
-		enemy3.update();
-		moveEnemy(enemy4);
-		enemy4.update();
-		moveEnemy(enemy5);
-		enemy5.update();
-		
-		for(Bullets bullet: bullets)
+		if (hero.getX() <= 0)
 		{
-			bullet.shoot();
-			
+				hero.setDx(3);
 		}
-		
+		else if(hero.getX() >= 1200)
+		{
+			hero.setDx(-3);
+		}
+		if (hero.getY() <= 0)
+		{
+				hero.setDy(3);
+		}
+		else if(hero.getY() >= 550)
+		{
+			hero.setLocation(hero.getX(), 550);
+		}
+		else if(wall1.isTouched(hero))
+		{
+			if(hero.getX()<=200)
+			{
+				hero.setDx(-3);
+				hero.setDy(3);
+			}
+			else
+			{
+				hero.setDx(3);
+				hero.setDy(3);
+			}
+		}
+		for(Platform platform: platforms)
+		{
+			if(platform.isTouched(hero))
+			{
+				if(platform == platform1)
+					break;
+				if(platform==platform2)
+				{
+					hero.setDx(-3);
+					hero.setDy(-3);
+				}
+				if(platform.getY() >= hero.getY())
+					hero.setDy(-3);
+				if(platform.getY() <= hero.getY())
+					hero.setDy(3);
+				if(platform.getX() >= hero.getX())
+					hero.setDx(-3);
+				if(platform.getX() <= hero.getX())
+					hero.setDx(3);
+			}	
+		}
+	}
+	public void checkEnemies()
+	{
 		for (Enemy enemy: enemies)
 		{
 			for(Bullets bullet : bullets)
@@ -224,7 +277,7 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 			if(!enemies.get(i).lifeStatus())
 				enemies.remove(i);
 		}
-		if(enemies.isEmpty())
+		if(enemies.isEmpty() && platform5.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
@@ -232,6 +285,29 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 			add(gameOver);
 			timer.stop();
 		}
+	}
+	public void actionPerformed(ActionEvent e) 
+	{
+		
+		movePlatform(platform5);
+		moveEnemy(enemy1);
+		enemy1.update();
+		moveEnemy(enemy2);
+		enemy2.update();
+		moveEnemy(enemy3);
+		enemy3.update();
+		moveEnemy(enemy4);
+		enemy4.update();
+		moveEnemy(enemy5);
+		enemy5.update();
+		
+		for(Bullets bullet: bullets)
+		{
+			bullet.shoot();
+			
+		}
+		checkEnemies();
+		
 		if(lava.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("Game Over");
@@ -240,6 +316,7 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 			add(gameOver);
 			timer.stop();
 		}
+		checkBounds();
 		hero.update();
 		platform5.update();
 		repaint(platform5);
@@ -255,6 +332,3 @@ public class Level3 extends Levels//extends JPanel implements ActionListener, Le
 	
 
 }
-
-
-

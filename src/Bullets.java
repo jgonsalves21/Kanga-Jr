@@ -26,6 +26,23 @@ public class Bullets extends JComponent
 		startY=sY;
 		mouseLocation=mL;
 	}
+	public boolean isTouched(Hero hero)
+	{
+		if (hero.getX() <= (getX() + getWidth()))
+		{
+			if ((hero.getX() + hero.getWidth()) >= getX())
+			{
+				if (hero.getY() <= (getY() + getHeight()))
+				{
+					if ((hero.getY() + hero.getHeight()) >= getY())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;

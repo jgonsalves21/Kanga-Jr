@@ -65,6 +65,17 @@ public class Master extends JFrame implements ActionListener
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				ActionMap amap = lvl1.getActionMap();
+				MoveRight moveR = new MoveRight(lvl1);
+				amap.put("moveR", moveR);
+				MoveLeft moveL = new MoveLeft(lvl1);
+				amap.put("moveL", moveL);
+				MoveUp moveU = new MoveUp(lvl1);
+				amap.put("moveU", moveU);
+				MoveDown moveD = new MoveDown(lvl1);
+				amap.put("moveD", moveD);
+				Reset reset = new Reset(lvl1);
+				amap.put("reset", reset);
 				cl.show(overall, "level 1");
 				add(overall);
 				
@@ -79,6 +90,19 @@ public class Master extends JFrame implements ActionListener
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				ActionMap amap = lvl2.getActionMap();
+				MoveRight moveR = new MoveRight(lvl2);
+				amap.put("moveR", moveR);
+				MoveLeft moveL = new MoveLeft(lvl2);
+				amap.put("moveL", moveL);
+				Shoot shoot = new Shoot(lvl2);
+				amap.put("shoot", shoot);
+				MoveUp moveU = new MoveUp(lvl2);
+				amap.put("moveU", moveU);
+				MoveDown moveD = new MoveDown(lvl2);
+				amap.put("moveD", moveD);
+				Reset reset = new Reset(lvl2);
+				amap.put("reset", reset);
 				cl.show(overall, "level 2");
 				add(overall);
 				
@@ -105,6 +129,8 @@ public class Master extends JFrame implements ActionListener
 				amap.put("moveU", moveU);
 				MoveDown moveD = new MoveDown(lvl3);
 				amap.put("moveD", moveD);
+				Reset reset = new Reset(lvl3);
+				amap.put("reset", reset);
 				cl.show(overall, "level 3");
 				add(overall);
 				
@@ -144,6 +170,22 @@ public class Master extends JFrame implements ActionListener
 		public void actionPerformed(ActionEvent e) 
 		{
 			level.getHero().setDy(-5);
+			
+		}
+
+	}
+	class Reset extends AbstractAction
+	{
+		Levels level;
+		public Reset(Levels lvl)
+		{
+			level=lvl;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			level.getHero().setLocation(100, 100);
 			
 		}
 
@@ -219,5 +261,3 @@ public class Master extends JFrame implements ActionListener
 	}
 
 }
-
-
