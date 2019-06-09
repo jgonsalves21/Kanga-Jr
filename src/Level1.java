@@ -39,7 +39,7 @@ public class Level1 extends Levels implements ActionListener
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 		hero = new Hero();
-		hero.setBounds(1, 260, 50, 90);
+		hero.setBounds(1, 260, 50, 80);
 		add(hero);
 		addPlatform();
 		timer = new Timer(16, this);
