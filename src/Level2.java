@@ -40,6 +40,11 @@ public class Level2 extends Levels implements ActionListener
 	private Enemy enemy3;
 	private Enemy enemy4;
 	private Enemy enemy5;
+	private Enemy enemy6;
+	private Enemy enemy7;
+	private Enemy enemy8;
+	private Enemy enemy9;
+	private Enemy enemy10;
 	private Timer timer;
 	private boolean showAll;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -131,8 +136,45 @@ public class Level2 extends Levels implements ActionListener
 	{
 		enemy1= new Enemy(400, 500);
 		enemy1.setBounds(400, 300, 24, 30);
-		enemies.add(enemy1);
+		enemy2= new Enemy(5, 105);
+		enemy2.setBounds(5, 450, 24, 30);
+		enemy3= new Enemy(5, 105);
+		enemy3.setBounds(5, 300, 24, 30);
+		enemy4= new Enemy(5, 105);
+		enemy4.setBounds(5, 150, 24, 30);
+		enemy5 = new Enemy(675, 750);
+		enemy5.setBounds(675, 200, 24, 30);
+		enemy6= new Enemy(1000, 1100);
+		enemy6.setBounds(1000, 250, 24, 30);
+		enemy7= new Enemy(850, 950);
+		enemy7.setBounds(850, 150, 24, 30);
+		enemy8= new Enemy(850, 950);
+		enemy8.setBounds(850, 50, 24, 30);
+		enemy9= new Enemy(1000, 1100);
+		enemy9.setBounds(1000, 350, 24, 30);
+		enemy10 = new Enemy(605, 705);
+		enemy10.setBounds(605, 550, 24, 30);
 		add(enemy1);
+		add(enemy2);
+		add(enemy3);
+		add(enemy4);
+		add(enemy5);
+		add(enemy6);
+		add(enemy7);
+		add(enemy8);
+		add(enemy9);
+		add(enemy10);
+		
+		enemies.add(enemy1);
+		enemies.add(enemy2);
+		enemies.add(enemy3);
+		enemies.add(enemy4);
+		enemies.add(enemy5);
+		enemies.add(enemy6);
+		enemies.add(enemy7);
+		enemies.add(enemy8);
+		enemies.add(enemy9);
+		enemies.add(enemy10);
 	}
 	public void moveEnemy(Enemy enemy)
 	{
@@ -160,7 +202,6 @@ public class Level2 extends Levels implements ActionListener
 		if (showAll)
 		{
 			g2.fill(platform8);
-			g2.fill(platform9);
 			g2.fill(platform10);
 			g2.fill(platform11);
 			g2.fill(platform12);
@@ -168,6 +209,8 @@ public class Level2 extends Levels implements ActionListener
 			g2.draw(platform14);
 			g2.fill(wall2);
 			g2.fill(wall3);
+			g2.setColor(Color.blue);
+			g2.fill(platform9);
 		}
 		g2.setColor(Color.red);
 		g2.fill(lava);
@@ -261,7 +304,7 @@ public class Level2 extends Levels implements ActionListener
 			if(!enemies.get(i).lifeStatus())
 				enemies.remove(i);
 		}
-		if(enemies.isEmpty() && platform5.isTouched(hero))
+		if(platform9.isTouched(hero) && (enemies.size() <5))
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
@@ -276,6 +319,24 @@ public class Level2 extends Levels implements ActionListener
 	{
 		moveEnemy(enemy1);
 		enemy1.update();
+		moveEnemy(enemy2);
+		enemy2.update();
+		moveEnemy(enemy3);
+		enemy3.update();
+		moveEnemy(enemy4);
+		enemy4.update();
+		moveEnemy(enemy5);
+		enemy5.update();
+		moveEnemy(enemy6);
+		enemy6.update();
+		moveEnemy(enemy7);
+		enemy7.update();
+		moveEnemy(enemy8);
+		enemy8.update();
+		moveEnemy(enemy9);
+		enemy9.update();
+		moveEnemy(enemy10);
+		enemy10.update();
 		for(Bullets bullet: bullets)
 		{
 			bullet.shoot();
