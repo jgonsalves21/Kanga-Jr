@@ -52,6 +52,14 @@ public class Hero extends JComponent
 	{
 		dY=y;
 	}
+	public int getDx()
+	{
+		return dX;
+	}
+	public int getDy()
+	{
+		return dY;
+	}
 
 	public void update()
 	{
