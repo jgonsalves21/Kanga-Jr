@@ -65,5 +65,9 @@ public class Hero extends JComponent
 	{
 		setLocation((int)getX()+dX, (int)getY()+dY);
 	}
+	public void setY(double d)
+	{
+		setLocation(this.getX(), (int) d);
+	}
 	
 }
