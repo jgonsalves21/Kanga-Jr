@@ -31,6 +31,7 @@ public class Level1 extends Levels implements ActionListener
 	private boolean allPlatforms;
 	private boolean isJumping = false;
 	private int jumpTime = 0;
+	private boolean onPlatform = true;
 
 	
 	public Level1()
@@ -131,24 +132,7 @@ public class Level1 extends Levels implements ActionListener
 		{
 			hero.setLocation(hero.getX(), 550);
 		}
-		for(Platform platform: platforms)
-		{
-			if(platform.isTouched(hero))
-			{
-				
-				if(platform.getY() >= hero.getY())
-					hero.setDy(-3);
-				if(platform.getY() <= hero.getY())
-					hero.setDy(3);
-				if(platform.getX() >= hero.getX())
-					hero.setDx(-3);
-				if(platform.getX() <= hero.getX())
-					hero.setDx(3);
-			}
-			
-			
-				
-		}
+		
 	}
 	public void checkWin()
 	{
@@ -178,7 +162,7 @@ public class Level1 extends Levels implements ActionListener
 		{
 			jumpTime ++;
 			isJumping = true;
-			if (jumpTime == 30)
+			if (jumpTime == 25)
 			{
 				jumpTime = 0;
 				isJumping = false;
@@ -186,12 +170,30 @@ public class Level1 extends Levels implements ActionListener
 			}
 			System.out.println(hero.getDy());
 		}
-		if ((hero.getY() < 550) && !(isJumping))
+		for(Platform platform: platforms)
+		{
+			if(platform.isTouched(hero))
+			{
+				onPlatform = true;
+				if(platform.getY() <= hero.getY())
+					hero.setY(platform.getY() + 25);
+				else if(platform.getY() >= hero.getY())
+					hero.setY(platform.getY() - 90);
+				else if(platform.getX() >= hero.getX())
+					hero.setDx(0);
+				else if(platform.getX() <= hero.getX())
+					hero.setDx(0);
+			}
+			else
+			{
+				onPlatform = false;
+			}				
+		}
+		if ((hero.getY() < 550) && !(isJumping) && !(onPlatform))
 		{
 			hero.setDy(3);
 		}
-		
-		
+
 		checkBounds();
 		checkWin();
 		hero.update();
