@@ -29,6 +29,9 @@ public class Level1 extends Levels implements ActionListener
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private Timer timer;
 	private boolean allPlatforms;
+	private boolean isJumping = false;
+	private int jumpTime = 0;
+
 	
 	public Level1()
 	{
@@ -51,6 +54,7 @@ public class Level1 extends Levels implements ActionListener
 		
 		setVisible(true);
 	}
+	
 	public void keySensing()
 	{
 		int mapName = WHEN_IN_FOCUSED_WINDOW;
@@ -155,6 +159,7 @@ public class Level1 extends Levels implements ActionListener
 			gameOver.setBounds(250, 0, 400, 200);
 			add(gameOver);
 			timer.stop();
+			System.out.print(jumpTime);
 		}
 	}
 	@Override
@@ -168,12 +173,30 @@ public class Level1 extends Levels implements ActionListener
 			add(gameOver);
 			timer.stop();
 		}
+		
+		if((hero.getDy() == -5) || hero.getDy() == -3)
+		{
+			jumpTime ++;
+			isJumping = true;
+			if (jumpTime == 30)
+			{
+				jumpTime = 0;
+				isJumping = false;
+				System.out.println("you made it");
+			}
+			System.out.println(hero.getDy());
+		}
+		if ((hero.getY() < 550) && !(isJumping))
+		{
+			hero.setDy(3);
+		}
+		
+		
 		checkBounds();
 		checkWin();
 		hero.update();
 		revalidate();
 		repaint();
-		
 	}
 	@Override
 	public Hero getHero() {
