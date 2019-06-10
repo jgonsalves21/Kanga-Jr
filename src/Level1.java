@@ -142,7 +142,7 @@ public class Level1 extends Levels implements ActionListener
 	{
 		if(platform8.isTouched(hero))
 		{
-			if(platform8.getY() >= hero.getY() + 79)
+			if(platform8.getY() >= hero.getY() + 75)
 			{
 				JLabel gameOver = new JLabel("YOU WON!");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
