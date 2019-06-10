@@ -54,6 +54,8 @@ public class Level2 extends Levels implements ActionListener
 	private boolean isJumping = false;
 	private int jumpTime = 0;
 	private boolean onPlatform = true;
+	private int fallSpeed2 = 1;
+	private int delay = 0;
 	
 	private Hero hero;
 	
@@ -69,7 +71,7 @@ public class Level2 extends Levels implements ActionListener
 		timer.start();
 		hero = new Hero();
 		showAll=false;
-		hero.setBounds(255,10,50,80);
+		hero.setBounds(0,550,50,80);
 		add(hero);
 		addPlatform();
 		addEnemy();
@@ -94,8 +96,8 @@ public class Level2 extends Levels implements ActionListener
 	}
 	public void addPlatform()
 	{
-		safeFloor = new Rectangle(0,630, 100, 90);
-		lava = new Lava(100,630, 1280, 90);
+		safeFloor = new Rectangle(0,630, 275, 90);
+		lava = new Lava(300,630, 1280, 90);
 		
 		platform1 = new Platform(225, 580, 60, 20);
 		platform2 = new Platform(0, 500, 60, 20);
@@ -140,7 +142,7 @@ public class Level2 extends Levels implements ActionListener
 		enemy1= new Enemy(400, 500);
 		enemy1.setBounds(400, 300, 24, 30);
 		enemy2= new Enemy(5, 105);
-		enemy2.setBounds(5, 450, 24, 30);
+		enemy2.setBounds(5, 465, 24, 30);
 		enemy3= new Enemy(5, 105);
 		enemy3.setBounds(5, 300, 24, 30);
 		enemy4= new Enemy(5, 105);
@@ -222,11 +224,11 @@ public class Level2 extends Levels implements ActionListener
 	{
 		if (hero.getX() <= 0)
 		{
-				hero.setDx(3);
+			hero.setLocation(0, hero.getY());
 		}
 		else if(hero.getX() >= 1200)
 		{
-			hero.setDx(-3);
+			hero.setLocation(1200, hero.getY());
 		}
 		if (hero.getY() <= 0)
 		{
@@ -235,23 +237,41 @@ public class Level2 extends Levels implements ActionListener
 		else if(hero.getY() >= 550)
 		{
 			hero.setLocation(hero.getX(), 550);
+			fallSpeed2 = 1;
 		}
 		for(Walls wall: walls)
 		{
 			if(wall.isTouched(hero))
 			{
-				if(hero.getX()<=wall.getX())
+				if (wall.getLength() == 25)
 				{
-					hero.setDx(-3);
-					hero.setDy(-3);
+					if(hero.getX()<=wall.getX())
+					{
+						hero.setLocation((int)(wall.getX() - 50), hero.getY());
+					}
+					else if(hero.getY() <= wall.getY())
+					{
+						hero.setDy(-3);
+					}
+					else if(hero.getX() >= wall.getX())
+					{
+						hero.setLocation((int)(wall.getX() + 25), hero.getY());
+					}
 				}
-				else if(hero.getY() <= wall.getY())
+				else 
 				{
-					hero.setDy(-3);
-				}
-				else if(hero.getX() >= wall.getX())
-				{
-					hero.setDx(3);
+					if(hero.getX()<=wall.getX())
+					{
+						hero.setLocation((int)(wall.getX() - 50), hero.getY());
+					}
+					else if(hero.getY() <= wall.getY())
+					{
+						hero.setDy(-3);
+					}
+					else if(hero.getX() >= wall.getX())
+					{
+						hero.setLocation((int)(wall.getX() + 200), hero.getY());
+					}
 				}
 			}
 			
@@ -346,6 +366,7 @@ public class Level2 extends Levels implements ActionListener
 				jumpTime = 0;
 				isJumping = false;
 				System.out.println("you made it");
+				fallSpeed2 = 1;
 			}
 			System.out.println(hero.getDy());
 		}
@@ -354,6 +375,7 @@ public class Level2 extends Levels implements ActionListener
 			if(platform.isTouched(hero))
 			{
 				onPlatform = true;
+				fallSpeed2 = 1;
 				if(platform.getY() <= hero.getY())
 					hero.setY(platform.getY() + 25);
 				else if(platform.getY() >= hero.getY())
@@ -370,7 +392,12 @@ public class Level2 extends Levels implements ActionListener
 		}
 		if ((hero.getY() < 550) && !(isJumping) && !onPlatform)
 		{
-			hero.setDy(3);
+			hero.setDy(fallSpeed2);
+			delay ++;
+			if (delay %2 == 0)
+			{
+				fallSpeed2++;
+			}
 		}
 		hero.update();
 		revalidate();
