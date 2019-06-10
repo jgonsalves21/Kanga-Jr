@@ -51,6 +51,9 @@ public class Level2 extends Levels implements ActionListener
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<Bullets> bullets = new ArrayList<Bullets>();
 	private ArrayList<Walls> walls = new ArrayList<Walls>();
+	private boolean isJumping = false;
+	private int jumpTime = 0;
+	private boolean onPlatform = true;
 	
 	private Hero hero;
 	
@@ -66,7 +69,7 @@ public class Level2 extends Levels implements ActionListener
 		timer.start();
 		hero = new Hero();
 		showAll=false;
-		hero.setBounds(255,10,50,90);
+		hero.setBounds(255,10,50,80);
 		add(hero);
 		addPlatform();
 		addEnemy();
@@ -253,27 +256,7 @@ public class Level2 extends Levels implements ActionListener
 			}
 			
 		}
-		for(Platform platform: platforms)
-		{
-			if(platform.isTouched(hero))
-			{
-				if(platform == platform1)
-					break;
-				if(platform==platform2)
-				{
-					hero.setDx(-3);
-					hero.setDy(-3);
-				}
-				if(platform.getY() >= hero.getY())
-					hero.setDy(-3);
-				if(platform.getY() <= hero.getY())
-					hero.setDy(3);
-				if(platform.getX() >= hero.getX())
-					hero.setDx(-3);
-				if(platform.getX() <= hero.getX())
-					hero.setDx(3);
-			}	
-		}
+		
 	}
 	public void checkEnemies()
 	{
@@ -353,6 +336,41 @@ public class Level2 extends Levels implements ActionListener
 			gameOver.setBounds(50, 50, 400, 200);
 			add(gameOver);
 			timer.stop();
+		}
+		if((hero.getDy() == -5) || hero.getDy() == -3)
+		{
+			jumpTime ++;
+			isJumping = true;
+			if (jumpTime == 25)
+			{
+				jumpTime = 0;
+				isJumping = false;
+				System.out.println("you made it");
+			}
+			System.out.println(hero.getDy());
+		}
+		for(Platform platform: platforms)
+		{
+			if(platform.isTouched(hero))
+			{
+				onPlatform = true;
+				if(platform.getY() <= hero.getY())
+					hero.setY(platform.getY() + 25);
+				else if(platform.getY() >= hero.getY())
+					hero.setY(platform.getY() - 90);
+				else if(platform.getX() >= hero.getX())
+					hero.setDx(0);
+				else if(platform.getX() <= hero.getX())
+					hero.setDx(0);
+			}
+			else
+			{
+				onPlatform = false;
+			}				
+		}
+		if ((hero.getY() < 550) && !(isJumping) && !onPlatform)
+		{
+			hero.setDy(3);
 		}
 		hero.update();
 		revalidate();
