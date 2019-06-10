@@ -108,7 +108,7 @@ public class Level1 extends Levels implements ActionListener
 		platforms.add(platform5);
 		
 		platform6 = new Platform(950, 250, 170, 25);
-		platform7= new Platform(710, 200, 170, 25);
+		platform7= new Platform(710, 200, 140, 25);
 		platform9 = new Platform(430, 150, 170, 25);
 		platform8 = new Platform(150, 100, 170, 25);
 		platforms.add(platform6);
@@ -142,12 +142,15 @@ public class Level1 extends Levels implements ActionListener
 	{
 		if(platform8.isTouched(hero))
 		{
-			JLabel gameOver = new JLabel("YOU WON!");
-			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(250, 0, 400, 200);
-			add(gameOver);
-			timer.stop();
-			System.out.print(jumpTime);
+			if(platform8.getY() >= hero.getY() + 79)
+			{
+				JLabel gameOver = new JLabel("YOU WON!");
+				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+				gameOver.setBounds(250, 0, 400, 200);
+				add(gameOver);
+				timer.stop();
+				System.out.print(jumpTime);
+			}
 		}
 	}
 	@Override
@@ -186,7 +189,7 @@ public class Level1 extends Levels implements ActionListener
 				delay = 0;
 				if(platform.getY() <= hero.getY())
 					hero.setDy(3);
-				else if(platform.getY() >= hero.getY() - 90)
+				else if(platform.getY() >= hero.getY())
 					hero.setY(platform.getY() - 90);
 				else if(platform.getX() >= hero.getX())
 					hero.setDx(0);
