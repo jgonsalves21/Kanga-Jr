@@ -184,13 +184,12 @@ public class Level1 extends Levels implements ActionListener
 		{
 			if(platform.isTouched(hero))
 			{
-				onPlatform = true;
 				fallSpeed = 1;
 				delay = 0;
 				if(platform.getY() <= hero.getY())
 					hero.setDy(3);
-				else if(platform.getY() >= hero.getY())
-					hero.setY(platform.getY() - 90);
+				else if(platform.getY() >= hero.getY() )
+					hero.setY(platform.getY() - 80);
 				else if(platform.getX() >= hero.getX())
 					hero.setDx(0);
 				else if(platform.getX() <= hero.getX())
@@ -198,10 +197,10 @@ public class Level1 extends Levels implements ActionListener
 			}
 			else
 			{
-				onPlatform = false;
+			
 			}				
 		}
-		if ((hero.getY() < 550) && !(isJumping) && !(onPlatform))
+		if ((hero.getY() < 550) && !(isJumping))
 		{
 			hero.setDy(fallSpeed);
 			delay ++;
