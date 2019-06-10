@@ -6,8 +6,12 @@ import javax.swing.JLabel;
 
 public class Walls extends Rectangle
 {
+	private int length;
+	
+	
 	public Walls(int x,int y,int l,int w)
 	{
+		length = l;
 		setLocation(x,y);
 		setSize(l, w);
 	}
@@ -28,6 +32,11 @@ public class Walls extends Rectangle
 			}
 		}
 		return false;
+	}
+	
+	public int getLength()
+	{
+		return length;
 	}
 
 }
