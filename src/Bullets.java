@@ -61,9 +61,9 @@ public class Bullets extends JComponent
 	public void shoot()
 	{
 		if (mouseLocation.getX()>startX)
-			setLocation(getX()+5, getY());
+			setLocation(getX()+10, getY());
 		else
-			setLocation(getX()-5, getY());
+			setLocation(getX()-10, getY());
 	}
 	
 
