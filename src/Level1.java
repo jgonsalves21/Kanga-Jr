@@ -32,6 +32,8 @@ public class Level1 extends Levels implements ActionListener
 	private boolean isJumping = false;
 	private int jumpTime = 0;
 	private boolean onPlatform = true;
+	private int fallSpeed = 1;
+	private int delay = 0;
 
 	
 	public Level1()
@@ -94,21 +96,21 @@ public class Level1 extends Levels implements ActionListener
 	{
 		safeFloor = new Rectangle(0,630, 150, 90);
 		lava = new Lava(150,630, 1130, 90);
-		platform1 = new Platform(150, 550, 200, 25);
-		platform2 = new Platform(430, 500, 200, 25);
-		platform3 = new Platform(710, 450, 200, 25);
-		platform4 = new Platform(990, 400, 200, 25);
-		platform5 = new Platform(1200, 350, 100, 25);
+		platform1 = new Platform(150, 550, 180, 25);
+		platform2 = new Platform(430, 500, 180, 25);
+		platform3 = new Platform(710, 450, 170, 25);
+		platform4 = new Platform(990, 400, 180, 25);
+		platform5 = new Platform(1200, 325, 100, 25);
 		platforms.add(platform1);
 		platforms.add(platform2);
 		platforms.add(platform3);
 		platforms.add(platform4);
 		platforms.add(platform5);
 		
-		platform6 = new Platform(900, 300, 200, 25);
-		platform7= new Platform(710, 250, 200, 25);
-		platform9 = new Platform(430, 200, 200, 25);
-		platform8 = new Platform(150, 150, 200, 25);
+		platform6 = new Platform(950, 250, 170, 25);
+		platform7= new Platform(710, 200, 170, 25);
+		platform9 = new Platform(430, 150, 170, 25);
+		platform8 = new Platform(150, 100, 170, 25);
 		platforms.add(platform6);
 		platforms.add(platform7);
 		platforms.add(platform8);
@@ -118,11 +120,11 @@ public class Level1 extends Levels implements ActionListener
 	{
 		if (hero.getX() <= 0)
 		{
-				hero.setDx(3);
+			hero.setLocation(0, hero.getY());
 		}
 		else if(hero.getX() >= 1200)
 		{
-			hero.setDx(-3);
+			hero.setLocation(1200, hero.getY());
 		}
 		if (hero.getY() <= 0)
 		{
@@ -131,12 +133,14 @@ public class Level1 extends Levels implements ActionListener
 		else if(hero.getY() >= 550)
 		{
 			hero.setLocation(hero.getX(), 550);
+			fallSpeed = 1;
+			delay = 0;
 		}
 		
 	}
 	public void checkWin()
 	{
-		if(platform5.isTouched(hero))
+		if(platform8.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
@@ -167,17 +171,22 @@ public class Level1 extends Levels implements ActionListener
 				jumpTime = 0;
 				isJumping = false;
 				System.out.println("you made it");
+				fallSpeed = 1;
+				delay = 0;
 			}
 			System.out.println(hero.getDy());
 		}
+		checkWin();
 		for(Platform platform: platforms)
 		{
 			if(platform.isTouched(hero))
 			{
 				onPlatform = true;
+				fallSpeed = 1;
+				delay = 0;
 				if(platform.getY() <= hero.getY())
-					hero.setY(platform.getY() + 25);
-				else if(platform.getY() >= hero.getY())
+					hero.setDy(3);
+				else if(platform.getY() >= hero.getY() - 90)
 					hero.setY(platform.getY() - 90);
 				else if(platform.getX() >= hero.getX())
 					hero.setDx(0);
@@ -191,11 +200,15 @@ public class Level1 extends Levels implements ActionListener
 		}
 		if ((hero.getY() < 550) && !(isJumping) && !(onPlatform))
 		{
-			hero.setDy(3);
+			hero.setDy(fallSpeed);
+			delay ++;
+			if (delay %2 == 0)
+			{
+				fallSpeed++;
+			}
 		}
 
 		checkBounds();
-		checkWin();
 		hero.update();
 		revalidate();
 		repaint();
