@@ -146,7 +146,7 @@ public class Level1 extends Levels implements ActionListener
 			{
 				JLabel gameOver = new JLabel("YOU WON!");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-				gameOver.setBounds(250, 0, 400, 200);
+				gameOver.setBounds(350, 0, 400, 200);
 				add(gameOver);
 				timer.stop();
 				System.out.print(jumpTime);
@@ -160,7 +160,7 @@ public class Level1 extends Levels implements ActionListener
 		{
 			JLabel gameOver = new JLabel("Game Over");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(250, 0, 400, 200);
+			gameOver.setBounds(350, 0, 400, 200);
 			add(gameOver);
 			timer.stop();
 		}
@@ -187,8 +187,8 @@ public class Level1 extends Levels implements ActionListener
 				fallSpeed = 1;
 				delay = 0;
 				if(platform.getY() <= hero.getY())
-					hero.setDy(3);
-				else if(platform.getY() >= hero.getY() )
+					hero.setDy(5);
+				else if(platform.getY() >= hero.getY() + 60)
 					hero.setY(platform.getY() - 80);
 				else if(platform.getX() >= hero.getX())
 					hero.setDx(0);
