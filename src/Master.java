@@ -48,6 +48,8 @@ public class Master extends JFrame implements ActionListener
 		levels.add(level2);
 		JMenuItem level3 = new JMenuItem("Level 3");
 		levels.add(level3);
+		JMenuItem level4 = new JMenuItem("Level 4");
+		levels.add(level4);
 		
 		//CardLayout Info
 		Level1 lvl1 = new Level1();
@@ -57,6 +59,9 @@ public class Master extends JFrame implements ActionListener
 		Level3 lvl3 = new Level3();
 		overall.add(lvl3, "level 3");
 		lvl3.setFocusable(true);
+		Level4 lvl4 = new Level4();
+		overall.add(lvl4, "level 4");
+		
 		
 		// Action Listeners
 		level1.addActionListener(new ActionListener() 
@@ -133,6 +138,31 @@ public class Master extends JFrame implements ActionListener
 				amap.put("reset", reset);
 				cl.show(overall, "level 3");
 				add(overall);
+				
+			}
+			
+		});
+		
+		level4.addActionListener(new ActionListener() 
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				ActionMap amap = lvl4.getActionMap();
+				MoveRight moveR = new MoveRight(lvl4);
+				amap.put("moveR", moveR);
+				MoveLeft moveL = new MoveLeft(lvl4);
+				amap.put("moveL", moveL);
+				MoveUp moveU = new MoveUp(lvl4);
+				amap.put("moveU", moveU);
+				MoveDown moveD = new MoveDown(lvl4);
+				amap.put("moveD", moveD);
+				Reset reset = new Reset(lvl4);
+				amap.put("reset", reset);
+				cl.show(overall, "level 4");
+				add(overall);
+				
 				
 			}
 			
