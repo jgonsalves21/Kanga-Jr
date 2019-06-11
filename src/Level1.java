@@ -149,7 +149,7 @@ public class Level1 extends Levels implements ActionListener
 				gameOver.setBounds(350, 0, 400, 200);
 				add(gameOver);
 				timer.stop();
-				System.out.print(jumpTime);
+				
 			}
 		}
 	}
@@ -173,11 +173,11 @@ public class Level1 extends Levels implements ActionListener
 			{
 				jumpTime = 0;
 				isJumping = false;
-				System.out.println("you made it");
+				
 				fallSpeed = 1;
 				delay = 0;
 			}
-			System.out.println(hero.getDy());
+		
 		}
 		checkWin();
 		for(Platform platform: platforms)
