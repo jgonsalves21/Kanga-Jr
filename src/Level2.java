@@ -106,7 +106,7 @@ public class Level2 extends Levels implements ActionListener
 		platform5 = new Platform(225, 260, 60, 20);
 		platform6 = new Platform(0, 180, 60, 20);
 		platform7 = new Platform(255, 100, 60, 10);
-		platform8 = new Platform(425, 580, 100, 20);
+		platform8 = new Platform(425, 560, 160, 20);
 		platform9 = new Platform(1210, 360, 70, 20);
 		platform10 = new Platform(300, 500, 60, 20);
 		platform11 = new Platform(425, 420, 100, 20);
@@ -158,7 +158,7 @@ public class Level2 extends Levels implements ActionListener
 		enemy9= new Enemy(1000, 1100);
 		enemy9.setBounds(1000, 350, 24, 30);
 		enemy10 = new Enemy(605, 705);
-		enemy10.setBounds(605, 550, 24, 30);
+		enemy10.setBounds(605, 510, 24, 30);
 		add(enemy1);
 		add(enemy2);
 		add(enemy3);
@@ -251,7 +251,7 @@ public class Level2 extends Levels implements ActionListener
 					}
 					else if(hero.getY() <= wall.getY())
 					{
-						hero.setDy(-3);
+						hero.setDy(-5);
 					}
 					else if(hero.getX() >= wall.getX())
 					{
@@ -266,7 +266,7 @@ public class Level2 extends Levels implements ActionListener
 					}
 					else if(hero.getY() <= wall.getY())
 					{
-						hero.setDy(-3);
+						hero.setDy(-5);
 					}
 					else if(hero.getX() >= wall.getX())
 					{
@@ -378,8 +378,8 @@ public class Level2 extends Levels implements ActionListener
 				fallSpeed2 = 1;
 				if(platform.getY() <= hero.getY())
 					hero.setY(platform.getY() + 25);
-				else if(platform.getY() >= hero.getY())
-					hero.setY(platform.getY() - 90);
+				else if(platform.getY() >= hero.getY() + 60)
+					hero.setY(platform.getY() - 80);
 				else if(platform.getX() >= hero.getX())
 					hero.setDx(0);
 				else if(platform.getX() <= hero.getX())
