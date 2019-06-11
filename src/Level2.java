@@ -365,10 +365,10 @@ public class Level2 extends Levels implements ActionListener
 			{
 				jumpTime = 0;
 				isJumping = false;
-				System.out.println("you made it");
+				
 				fallSpeed2 = 1;
 			}
-			System.out.println(hero.getDy());
+		
 		}
 		for(Platform platform: platforms)
 		{
