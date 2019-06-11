@@ -41,7 +41,7 @@ public class Level4  extends Levels implements ActionListener
 	private boolean isJumping = false;
 	private int jumpTime = 0;
 	private boolean onPlatform = true;
-	private int fallSpeed2 = 1;
+	private int fallSpeed;
 	private int delay = 0;
 	
 	public Level4()
@@ -134,6 +134,13 @@ public class Level4  extends Levels implements ActionListener
 		else enemy.setDx(-5);
 	}
 	
+	public void updateEnemy()
+	{
+		moveEnemy(enemy1);
+		enemy1.update();
+		moveEnemy(enemy2);
+		enemy2.update();
+	}
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -159,164 +166,162 @@ public class Level4  extends Levels implements ActionListener
 	
 	}
 	
+	public void checkWin()
+	{
+		//if(platform12.isTouched(hero))
+		{
+			JLabel gameOver = new JLabel("YOU WON!");
+			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+			gameOver.setBounds(250, 0, 400, 200);
+			add(gameOver);
+			timer.stop();
+		}
+	}
+	
 	public void checkBounds()
 	{
 		if (hero.getX() <= 0)
 		{
-			hero.setLocation(0, hero.getY());
+				hero.setDx(3);
 		}
 		else if(hero.getX() >= 1200)
 		{
-			hero.setLocation(1200, hero.getY());
+			hero.setDx(-3);
 		}
 		if (hero.getY() <= 0)
 		{
 				hero.setDy(3);
 		}
-		else if(hero.getY() >= 550)
+		else if(hero.getY() >= 680)
 		{
-			hero.setLocation(hero.getX(), 550);
-			fallSpeed2 = 1;
+			hero.setLocation(hero.getX(), 680);
 		}
-		for(Walls wall: walls)
+		for (Walls wall : walls)
 		{
-			if(wall.isTouched(hero))
+			if (wall.isTouched(hero))
 			{
-				if (wall.getLength() == 25)
+				if(hero.getX()< wall.getX())
 				{
-					if(hero.getX()<=wall.getX())
-					{
-						hero.setLocation((int)(wall.getX() - 50), hero.getY());
-					}
-					else if(hero.getY() <= wall.getY())
-					{
-						hero.setDy(-3);
-					}
-					else if(hero.getX() >= wall.getX())
-					{
-						hero.setLocation((int)(wall.getX() + 25), hero.getY());
-					}
+						hero.setDx(-3);
 				}
-				else 
-				{
-					if(hero.getX()<=wall.getX())
-					{
-						hero.setLocation((int)(wall.getX() - 50), hero.getY());
-					}
-					else if(hero.getY() <= wall.getY())
-					{
-						hero.setDy(-3);
-					}
-					else if(hero.getX() >= wall.getX())
-					{
-						hero.setLocation((int)(wall.getX() + 200), hero.getY());
-					}
-				}
+				else hero.setDx(3);
+					
 			}
-			
 		}
-		
 	}
+	
 	public void checkEnemies()
 	{
-		for (Enemy enemy: enemies)
+		for (int i=enemies.size()-1; i>=0; i--)
 		{
-			for(Bullets bullet : bullets)
+			for(int j = bullets.size()-1; j>=0; j--)
 			{
-				if (enemy.isShot(bullet))
+				if (enemies.get(i).isShot(bullets.get(j)))
 				{
-					remove(enemy);
-					remove(bullet);
-					enemy.Kill();
+					
+					remove(enemies.get(i));
+					remove(bullets.get(j));
+					bullets.remove(j);
+					enemies.remove(i);
 					break;
 				}
 			}
-			if (enemy.isTouched(hero))
+			
+		}
+		for (int i=enemies.size()-1; i>=0; i--)
+		{
+			if (enemies.get(i).isTouched(hero))
 			{
 				JLabel gameOver = new JLabel("Game Over");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-				gameOver.setBounds(250, 50, 400, 200);
+				gameOver.setBounds(150, 0, 400, 50);
 				add(gameOver);
 				timer.stop();
 			}
-			
 		}
-		for (int i= enemies.size()-1; i>=0; i--)
+		for(int j = bullets.size()-1; j>=0; j--)
 		{
-			if(!enemies.get(i).lifeStatus())
-				enemies.remove(i);
-		}
-		//if(platform9.isTouched(hero) && (enemies.size() <5))
-		{
-			JLabel gameOver = new JLabel("YOU WON!");
-			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(250, 50, 400, 200);
-			add(gameOver);
-			timer.stop();
+			if(bullets.get(j).getX() <=0)
+			{
+				remove(bullets.get(j));
+				bullets.remove(j);
+				
+			}
+				
+			else if(bullets.get(j).getX() >=1250)
+			{
+				remove(bullets.get(j));
+				bullets.remove(j);
+			}
+				
 		}
 	}
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		moveEnemy(enemy1);
-		enemy1.update();
-		moveEnemy(enemy2);
-		enemy2.update();
-		repaint();
-		for(Bullets bullet: bullets)
+	public void actionPerformed(ActionEvent e) 
+	{
+		updateEnemy();
+		
+		for (Bullets bullet: bullets)
 		{
 			bullet.shoot();
-			
 		}
-	
-	
-	if((hero.getDy() == -5) || hero.getDy() == -3)
-	{
-		jumpTime ++;
-		isJumping = true;
-		if (jumpTime == 25)
+		
+		checkEnemies();
+		if(lava1.isTouched(hero) || lava2.isTouched(hero))
 		{
-			jumpTime = 0;
-			isJumping = false;
-			System.out.println("you made it");
-			fallSpeed2 = 1;
+			JLabel gameOver = new JLabel("Game Over");
+			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+			gameOver.setBounds(50, 50, 400, 50);
+			add(gameOver);
+			timer.stop();
 		}
-		System.out.println(hero.getDy());
+		if((hero.getDy() == -5) || hero.getDy() == -3)
+		{
+			jumpTime ++;
+			isJumping = true;
+			if (jumpTime == 25)
+			{
+				jumpTime = 0;
+				isJumping = false;
+			}
+		}
+		int fallSpeed = 1;
+		for(Platform platform: platforms)
+		{
+			if(platform.isTouched(hero))
+			{
+				onPlatform = true;
+				fallSpeed = 1;
+				delay = 0;
+				if(platform.getY() <= hero.getY())
+					hero.setDy(3);
+				else if(platform.getY() >= hero.getY() - 80)
+					hero.setY(platform.getY() - 80);
+				else if(platform.getX() >= hero.getX())
+					hero.setDx(0);
+				else if(platform.getX() <= hero.getX())
+					hero.setDx(0);
+			}
+			else
+			{
+				onPlatform = false;
+			}				
+		}
+		if ((hero.getY() < 660) && !(isJumping) && !(onPlatform))
+		{
+			hero.setDy(fallSpeed);
+			delay ++;
+			if (delay %2 == 0)
+			{
+				fallSpeed++;
+			}
+		}
+		checkWin();
+		checkBounds();
+		hero.update();
+		revalidate();
+		repaint();
 	}
-	for(Platform platform: platforms)
-	{
-		if(platform.isTouched(hero))
-		{
-			onPlatform = true;
-			fallSpeed2 = 1;
-			if(platform.getY() <= hero.getY())
-				hero.setY(platform.getY() + 25);
-			else if(platform.getY() >= hero.getY())
-				hero.setY(platform.getY() - 90);
-			else if(platform.getX() >= hero.getX())
-				hero.setDx(0);
-			else if(platform.getX() <= hero.getX())
-				hero.setDx(0);
-		}
-		else
-		{
-			onPlatform = false;
-		}				
-	}
-	if ((hero.getY() < 550) && !(isJumping) && !onPlatform)
-	{
-		hero.setDy(fallSpeed2);
-		delay ++;
-		if (delay %2 == 0)
-		{
-			fallSpeed2++;
-		}
-	}
-	hero.update();
-	revalidate();
-	repaint();
-	
-	
-}
 	@Override
 	public Hero getHero() {
 		return hero;
