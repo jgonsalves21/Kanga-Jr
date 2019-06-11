@@ -4,8 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,7 +17,7 @@ import javax.swing.Timer;
 
 public class Level1 extends Levels implements ActionListener
 {
-	private Rectangle safeFloor;
+	private Platform safeFloor;
 	private Lava lava;
 	private Platform platform1;
 	private Platform platform2;
@@ -31,10 +34,13 @@ public class Level1 extends Levels implements ActionListener
 	private boolean allPlatforms;
 	private boolean isJumping = false;
 	private int jumpTime = 0;
+	private int jumpTime2 = 0;
 	private boolean onPlatform = true;
 	private int fallSpeed = 1;
 	private int delay = 0;
-
+	private int jumpSpeed = -20;
+	private boolean onGround = false;
+	private double yVel = 0;
 	
 	public Level1()
 	{
@@ -50,20 +56,17 @@ public class Level1 extends Levels implements ActionListener
 		keySensing();
 		allPlatforms=false;
 		
-		
-		
-		
-		
-		
 		setVisible(true);
 	}
 	
 	public void keySensing()
 	{
+		/**
 		int mapName = WHEN_IN_FOCUSED_WINDOW;
 		InputMap imap= getInputMap(mapName);
 		KeyStroke right = KeyStroke.getKeyStroke('d');
-		imap.put(right, "moveR");
+		imap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "pressed");
+		imap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "released");
 		KeyStroke left = KeyStroke.getKeyStroke('a');
 		imap.put(left, "moveL");
 		KeyStroke up = KeyStroke.getKeyStroke('w');
@@ -71,7 +74,78 @@ public class Level1 extends Levels implements ActionListener
 		KeyStroke down = KeyStroke.getKeyStroke('s');
 		imap.put(down, "moveD");
 		KeyStroke reset = KeyStroke.getKeyStroke('r');
-		imap.put(reset, "reset");
+		imap.put(reset, "reset");**/
+		InputMap im = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = getActionMap();
+
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "rightpressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "rightreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "leftpressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "leftreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "uppressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "upreleased");
+
+        am.put("rightpressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(5);
+            }
+        });
+
+        am.put("rightreleased", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(0);
+            }
+        });
+        am.put("leftpressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(-5);
+            }
+        });
+
+        am.put("leftreleased", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(0);
+            }
+        });
+        am.put("uppressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+            	System.out.println(onGround);
+            	if(onGround) {
+	            	onGround = false;
+	                yVel = -20;
+	                /*
+	                jumpTime++;
+	                jumpTime2= jumpTime%6;                
+	                jumpSpeed ++;
+	                if(jumpTime2 ==10)
+	                {
+	                	jumpTime = 0;
+	                	jumpSpeed = -5;
+	                	delay = 0;
+	                }
+	                */
+            	}
+                
+            }
+        });
+        am.put("upreleased", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+            	/*
+                jumpSpeed=-5;
+                jumpTime=0;
+                delay=0;
+                isJumping=false;
+                */
+            }
+        });
+
+        
 	}
 	public void paintComponent(Graphics g)
 	{
@@ -94,7 +168,7 @@ public class Level1 extends Levels implements ActionListener
 	}
 	public void addPlatform()
 	{
-		safeFloor = new Rectangle(0,630, 150, 90);
+		safeFloor = new Platform(0,630, 150, 90);
 		lava = new Lava(150,630, 1130, 90);
 		platform1 = new Platform(150, 550, 180, 25);
 		platform2 = new Platform(430, 500, 180, 25);
@@ -115,6 +189,7 @@ public class Level1 extends Levels implements ActionListener
 		platforms.add(platform7);
 		platforms.add(platform8);
 		platforms.add(platform9);
+		platforms.add(safeFloor);
 	}
 	public void checkBounds()
 	{
@@ -128,7 +203,7 @@ public class Level1 extends Levels implements ActionListener
 		}
 		if (hero.getY() <= 0)
 		{
-				hero.setDy(3);
+				hero.setLocation(hero.getX(),0);
 		}
 		else if(hero.getY() >= 550)
 		{
@@ -165,27 +240,16 @@ public class Level1 extends Levels implements ActionListener
 			timer.stop();
 		}
 		
-		if((hero.getDy() == -5) || hero.getDy() == -3)
-		{
-			jumpTime ++;
-			isJumping = true;
-			if (jumpTime == 25)
-			{
-				jumpTime = 0;
-				isJumping = false;
-				
-				fallSpeed = 1;
-				delay = 0;
-			}
 		
-		}
 		checkWin();
+		onGround = false;
 		for(Platform platform: platforms)
 		{
-			if(platform.isTouched(hero))
+			if(platform.isTouched(hero) && yVel >= 0)
 			{
 				fallSpeed = 1;
 				delay = 0;
+				onGround = true;
 				if(platform.getY() <= hero.getY())
 					hero.setDy(5);
 				else if(platform.getY() >= hero.getY() + 60)
@@ -200,16 +264,25 @@ public class Level1 extends Levels implements ActionListener
 			
 			}				
 		}
-		if ((hero.getY() < 550) && !(isJumping))
+		
+		if(onGround) {
+			yVel = 0;
+		}
+		if ((hero.getY() < 550) && !onGround)
 		{
+			yVel += 1;
+			
+			/*
 			hero.setDy(fallSpeed);
 			delay ++;
 			if (delay %2 == 0)
 			{
 				fallSpeed++;
 			}
+			*/
 		}
-
+		hero.setDy(yVel);
+		System.out.println(onGround);
 		checkBounds();
 		hero.update();
 		revalidate();
@@ -226,3 +299,4 @@ public class Level1 extends Levels implements ActionListener
 		return null;
 	}
 }
+
