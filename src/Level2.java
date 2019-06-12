@@ -1,21 +1,28 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
-public class Level2 extends Levels implements ActionListener
+public class Level2 extends Levels implements ActionListener, MouseListener
 {
 	
-	private Rectangle safeFloor;
+	private Platform safeFloor;
 	private Lava lava;
 	
 	private Walls wall1;
@@ -53,9 +60,13 @@ public class Level2 extends Levels implements ActionListener
 	private ArrayList<Walls> walls = new ArrayList<Walls>();
 	private boolean isJumping = false;
 	private int jumpTime = 0;
+	private int jumpTime2 = 0;
 	private boolean onPlatform = true;
-	private int fallSpeed2 = 1;
+	private int fallSpeed = 1;
 	private int delay = 0;
+	private int jumpSpeed = -20;
+	private boolean onGround = false;
+	private double yVel = 0;
 	
 	private Hero hero;
 	
@@ -65,6 +76,7 @@ public class Level2 extends Levels implements ActionListener
 		this.setLayout(null);
 		this.setFocusable(true);
 		this.requestFocusInWindow();
+		addMouseListener(this);
 		keySensing();
 		
 		timer = new Timer(16, this);
@@ -75,28 +87,63 @@ public class Level2 extends Levels implements ActionListener
 		add(hero);
 		addPlatform();
 		addEnemy();
+		
 	}
 	
 	public void keySensing()
 	{
-		int mapName = WHEN_IN_FOCUSED_WINDOW;
-		InputMap imap= getInputMap(mapName);
-		KeyStroke right = KeyStroke.getKeyStroke('d');
-		imap.put(right, "moveR");
-		KeyStroke left = KeyStroke.getKeyStroke('a');
-		imap.put(left, "moveL");
-		KeyStroke space = KeyStroke.getKeyStroke(' ');
-		imap.put(space, "shoot");
-		KeyStroke up = KeyStroke.getKeyStroke('w');
-		imap.put(up, "moveU");
-		KeyStroke down = KeyStroke.getKeyStroke('s');
-		imap.put(down, "moveD");
-		KeyStroke reset = KeyStroke.getKeyStroke('r');
-		imap.put(reset, "reset");
+		
+		InputMap im = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = getActionMap();
+
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false), "rightpressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "rightreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false), "leftpressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "leftreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), "uppressed");
+        
+
+        am.put("rightpressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(8);
+            }
+        });
+
+        am.put("rightreleased", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(0);
+            }
+        });
+        am.put("leftpressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(-5);
+            }
+        });
+
+        am.put("leftreleased", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                hero.setDx(0);
+            }
+        });
+        am.put("uppressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) 
+            {
+            	System.out.println(onGround);
+            	if(onGround) {
+	            	onGround = false;
+	                yVel = -15;
+            	}
+                
+            }
+        });
 	}
 	public void addPlatform()
 	{
-		safeFloor = new Rectangle(0,630, 275, 90);
+		safeFloor = new Platform(0,630, 275, 90);
 		lava = new Lava(300,630, 1280, 90);
 		
 		platform1 = new Platform(225, 580, 60, 20);
@@ -128,6 +175,7 @@ public class Level2 extends Levels implements ActionListener
 		platforms.add(platform12);
 		platforms.add(platform13);
 		platforms.add(platform14);
+		platforms.add(safeFloor);
 		
 		wall1 = new Walls(275, 110, 25, 610);
 		wall2 = new Walls(785, 200, 200, 200);
@@ -232,12 +280,13 @@ public class Level2 extends Levels implements ActionListener
 		}
 		if (hero.getY() <= 0)
 		{
-				hero.setDy(3);
+				hero.setLocation(hero.getX(),0);
 		}
 		else if(hero.getY() >= 550)
 		{
 			hero.setLocation(hero.getX(), 550);
-			fallSpeed2 = 1;
+			fallSpeed = 1;
+			delay = 0;
 		}
 		for(Walls wall: walls)
 		{
@@ -307,7 +356,7 @@ public class Level2 extends Levels implements ActionListener
 			if(!enemies.get(i).lifeStatus())
 				enemies.remove(i);
 		}
-		if(platform9.isTouched(hero) && (enemies.size() <5))
+		if(platform9.isTouched(hero) && (enemies.size() <6))
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
@@ -320,6 +369,7 @@ public class Level2 extends Levels implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
+		
 		moveEnemy(enemy1);
 		enemy1.update();
 		moveEnemy(enemy2);
@@ -357,27 +407,24 @@ public class Level2 extends Levels implements ActionListener
 			add(gameOver);
 			timer.stop();
 		}
-		if((hero.getDy() == -5) || hero.getDy() == -3)
+		if ((hero.getY() < 550) && !(isJumping))
 		{
-			jumpTime ++;
-			isJumping = true;
-			if (jumpTime == 25)
+			hero.setDy(fallSpeed);
+			delay ++;
+			if (delay %2 == 0)
 			{
-				jumpTime = 0;
-				isJumping = false;
-				
-				fallSpeed2 = 1;
+				fallSpeed++;
 			}
-		
 		}
 		for(Platform platform: platforms)
 		{
-			if(platform.isTouched(hero))
+			if(platform.isTouched(hero) && yVel >= 0)
 			{
-				onPlatform = true;
-				fallSpeed2 = 1;
+				fallSpeed = 1;
+				delay = 0;
+				onGround = true;
 				if(platform.getY() <= hero.getY())
-					hero.setY(platform.getY() + 25);
+					hero.setDy(5);
 				else if(platform.getY() >= hero.getY() + 60)
 					hero.setY(platform.getY() - 80);
 				else if(platform.getX() >= hero.getX())
@@ -387,18 +434,21 @@ public class Level2 extends Levels implements ActionListener
 			}
 			else
 			{
-				onPlatform = false;
+			
 			}				
 		}
-		if ((hero.getY() < 550) && !(isJumping) && !onPlatform)
-		{
-			hero.setDy(fallSpeed2);
-			delay ++;
-			if (delay %2 == 0)
-			{
-				fallSpeed2++;
-			}
+		
+		if(onGround) {
+			yVel = 0;
 		}
+		if ((hero.getY() < 550) && !onGround)
+		{
+			yVel += 1;
+			
+		}
+		hero.setDy(yVel);
+		System.out.println(onGround);
+		checkBounds();
 		hero.update();
 		revalidate();
 		repaint();
@@ -418,5 +468,39 @@ public class Level2 extends Levels implements ActionListener
 	{
 		// TODO Auto-generated method stub
 		return bullets;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+		Bullets nbullet = new Bullets(hero.getX()+25, hero.getY()+45, mouseLocation);
+		nbullet.setBounds(hero.getX()+25, hero.getY()+45, 10, 10);
+		bullets.add(nbullet);
+		add(nbullet);
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
