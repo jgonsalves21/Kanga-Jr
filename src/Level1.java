@@ -1,10 +1,14 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -48,7 +52,7 @@ public class Level1 extends Levels implements ActionListener
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 		hero = new Hero();
-		hero.setBounds(1, 260, 50, 80);
+		hero.setBounds(1, 560, 50, 80);
 		add(hero);
 		addPlatform();
 		timer = new Timer(16, this);
@@ -61,34 +65,21 @@ public class Level1 extends Levels implements ActionListener
 	
 	public void keySensing()
 	{
-		/**
-		int mapName = WHEN_IN_FOCUSED_WINDOW;
-		InputMap imap= getInputMap(mapName);
-		KeyStroke right = KeyStroke.getKeyStroke('d');
-		imap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "pressed");
-		imap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "released");
-		KeyStroke left = KeyStroke.getKeyStroke('a');
-		imap.put(left, "moveL");
-		KeyStroke up = KeyStroke.getKeyStroke('w');
-		imap.put(up, "moveU");
-		KeyStroke down = KeyStroke.getKeyStroke('s');
-		imap.put(down, "moveD");
-		KeyStroke reset = KeyStroke.getKeyStroke('r');
-		imap.put(reset, "reset");**/
+		
 		InputMap im = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = getActionMap();
 
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "rightpressed");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "rightreleased");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "leftpressed");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "leftreleased");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "uppressed");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "upreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false), "rightpressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "rightreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false), "leftpressed");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "leftreleased");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), "uppressed");
+        
 
         am.put("rightpressed", new AbstractAction() {
             public void actionPerformed(ActionEvent e) 
             {
-                hero.setDx(5);
+                hero.setDx(8);
             }
         });
 
@@ -117,33 +108,12 @@ public class Level1 extends Levels implements ActionListener
             	System.out.println(onGround);
             	if(onGround) {
 	            	onGround = false;
-	                yVel = -20;
-	                /*
-	                jumpTime++;
-	                jumpTime2= jumpTime%6;                
-	                jumpSpeed ++;
-	                if(jumpTime2 ==10)
-	                {
-	                	jumpTime = 0;
-	                	jumpSpeed = -5;
-	                	delay = 0;
-	                }
-	                */
+	                yVel = -15;
             	}
                 
             }
         });
-        am.put("upreleased", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) 
-            {
-            	/*
-                jumpSpeed=-5;
-                jumpTime=0;
-                delay=0;
-                isJumping=false;
-                */
-            }
-        });
+        
 
         
 	}
@@ -157,11 +127,14 @@ public class Level1 extends Levels implements ActionListener
 		g2.fill(platform3);
 		g2.fill(platform4);
 		g2.fill(platform5);
-		
+		if(allPlatforms)
+		{
 			g2.fill(platform6);
 			g2.fill(platform7);
 			g2.fill(platform8);
 			g2.fill(platform9);
+		}
+		
 		
 		g2.setColor(Color.red);
 		g2.fill(lava);
@@ -180,16 +153,12 @@ public class Level1 extends Levels implements ActionListener
 		platforms.add(platform3);
 		platforms.add(platform4);
 		platforms.add(platform5);
-		
+		platforms.add(safeFloor);
 		platform6 = new Platform(950, 250, 170, 25);
 		platform7= new Platform(710, 200, 140, 25);
 		platform9 = new Platform(430, 150, 170, 25);
 		platform8 = new Platform(150, 100, 170, 25);
-		platforms.add(platform6);
-		platforms.add(platform7);
-		platforms.add(platform8);
-		platforms.add(platform9);
-		platforms.add(safeFloor);
+		
 	}
 	public void checkBounds()
 	{
@@ -212,6 +181,17 @@ public class Level1 extends Levels implements ActionListener
 			delay = 0;
 		}
 		
+	}
+	public void checkAll()
+	{
+		if(allPlatforms)
+		{
+			platforms.add(platform6);
+			platforms.add(platform7);
+			platforms.add(platform8);
+			platforms.add(platform9);
+			platforms.add(safeFloor);
+		}
 	}
 	public void checkWin()
 	{
@@ -243,6 +223,9 @@ public class Level1 extends Levels implements ActionListener
 		
 		checkWin();
 		onGround = false;
+		if(platform5.isTouched(hero))
+			allPlatforms=true;
+		checkAll();
 		for(Platform platform: platforms)
 		{
 			if(platform.isTouched(hero) && yVel >= 0)
@@ -272,14 +255,6 @@ public class Level1 extends Levels implements ActionListener
 		{
 			yVel += 1;
 			
-			/*
-			hero.setDy(fallSpeed);
-			delay ++;
-			if (delay %2 == 0)
-			{
-				fallSpeed++;
-			}
-			*/
 		}
 		hero.setDy(yVel);
 		System.out.println(onGround);
@@ -288,15 +263,18 @@ public class Level1 extends Levels implements ActionListener
 		revalidate();
 		repaint();
 	}
+
 	@Override
 	public Hero getHero() {
 		// TODO Auto-generated method stub
-		return hero;
+		return null;
 	}
+
 	@Override
 	public ArrayList<Bullets> getBullets() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 }
-
