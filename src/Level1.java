@@ -36,13 +36,6 @@ public class Level1 extends Levels implements ActionListener
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private Timer timer;
 	private boolean allPlatforms;
-	private boolean isJumping = false;
-	private int jumpTime = 0;
-	private int jumpTime2 = 0;
-	private boolean onPlatform = true;
-	private int fallSpeed = 1;
-	private int delay = 0;
-	private int jumpSpeed = -20;
 	private boolean onGround = false;
 	private double yVel = 0;
 	
@@ -92,7 +85,7 @@ public class Level1 extends Levels implements ActionListener
         am.put("leftpressed", new AbstractAction() {
             public void actionPerformed(ActionEvent e) 
             {
-                hero.setDx(-5);
+                hero.setDx(-8);
             }
         });
 
@@ -177,8 +170,7 @@ public class Level1 extends Levels implements ActionListener
 		else if(hero.getY() >= 550)
 		{
 			hero.setLocation(hero.getX(), 550);
-			fallSpeed = 1;
-			delay = 0;
+
 		}
 		
 	}
@@ -230,21 +222,25 @@ public class Level1 extends Levels implements ActionListener
 		{
 			if(platform.isTouched(hero) && yVel >= 0)
 			{
-				fallSpeed = 1;
-				delay = 0;
-				onGround = true;
-				if(platform.getY() <= hero.getY())
-					hero.setDy(5);
-				else if(platform.getY() >= hero.getY() + 60)
+				
+				
+				if(platform.getY() >= hero.getY() + 60)
+				{
+					onGround = true;
 					hero.setY(platform.getY() - 80);
+				}
 				else if(platform.getX() >= hero.getX())
 					hero.setDx(0);
 				else if(platform.getX() <= hero.getX())
 					hero.setDx(0);
 			}
-			else
+			else if ((platform.isTouched(hero) && yVel <= 0))
 			{
-			
+				if((platform.getY() + 20 <= hero.getY()) && (platform.getY() + 25 >= hero.getY()))
+				{
+					yVel = 0;
+				}
+					
 			}				
 		}
 		
@@ -257,7 +253,6 @@ public class Level1 extends Levels implements ActionListener
 			
 		}
 		hero.setDy(yVel);
-		System.out.println(onGround);
 		checkBounds();
 		hero.update();
 		revalidate();
