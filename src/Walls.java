@@ -33,6 +33,23 @@ public class Walls extends Rectangle
 		}
 		return false;
 	}
+	public boolean isShot(Bullets bullet)
+	{
+		if (bullet.getX() <= (getX() + getWidth()))
+		{
+			if ((bullet.getX() + bullet.getWidth()) >= getX())
+			{
+				if (bullet.getY() <= (getY() + getHeight()))
+				{
+					if ((bullet.getY() + bullet.getHeight()) >= getY())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
 	public int getLength()
 	{
@@ -40,3 +57,4 @@ public class Walls extends Rectangle
 	}
 
 }
+
