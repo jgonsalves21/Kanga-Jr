@@ -14,7 +14,7 @@ public class Hero extends JComponent
 {
 	private Ellipse2D.Double head;
 	private Rectangle leftArm, rightArm, leftLeg, rightLeg, torso;
-	private int dX = 0, dY=0;
+	private double dX = 0, dY=0;
 	private boolean falling;
 	private double gravity, velocity;
 	private int frames;
@@ -44,26 +44,26 @@ public class Hero extends JComponent
 		g2.fill(rightLeg);
 	}
 	
-	public void setDx(int x)
+	public void setDx(double x)
 	{
 		dX=x;
 	}
-	public void setDy(int y)
+	public void setDy(double y)
 	{
 		dY=y;
 	}
-	public int getDx()
+	public double getDx()
 	{
 		return dX;
 	}
-	public int getDy()
+	public double getDy()
 	{
 		return dY;
 	}
 
 	public void update()
 	{
-		setLocation((int)getX()+dX, (int)getY()+dY);
+		setLocation((int)(getX()+dX), (int)(getY()+dY));
 	}
 	public void setY(double d)
 	{
