@@ -37,7 +37,23 @@ public class Platform extends Rectangle
 		}
 		return false;
 	}
-	
+	public boolean isShot(Bullets bullet)
+	{
+		if (bullet.getX() <= (getX() + getWidth()))
+		{
+			if ((bullet.getX() + bullet.getWidth()) >= getX())
+			{
+				if (bullet.getY() <= (getY() + getHeight()))
+				{
+					if ((bullet.getY() + bullet.getHeight()) >= getY())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	public void setDx(int x)
 	{
 		dX=x;
@@ -54,3 +70,4 @@ public class Platform extends Rectangle
 	}
 	
 }
+
