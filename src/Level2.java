@@ -42,6 +42,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 	private Platform platform12;
 	private Platform platform13;
 	private Platform platform14;
+	private Platform platform15;
 	private Enemy enemy1;
 	private Enemy enemy2;
 	private Enemy enemy3;
@@ -153,6 +154,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		platform12 = new Platform(550, 340, 100, 20);
 		platform13 = new Platform(665, 260, 100, 20);
 		platform14 = new Platform(1050, 440, 100, 20);
+		platform15 = new Platform(785, 199, 200, 1 );
 		
 		platforms.add(platform1);
 		platforms.add(platform2);
@@ -168,6 +170,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		platforms.add(platform12);
 		platforms.add(platform13);
 		platforms.add(platform14);
+		platforms.add(platform15);
 		platforms.add(safeFloor);
 		
 		wall1 = new Walls(275, 110, 25, 610);
@@ -180,8 +183,8 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 	}
 	public void addEnemy()
 	{
-		enemy1= new Enemy(400, 500);
-		enemy1.setBounds(400, 300, 24, 30);
+		enemy1= new Enemy(450, 550);
+		enemy1.setBounds(450, 300, 24, 30);
 		enemy2= new Enemy(5, 105);
 		enemy2.setBounds(5, 465, 24, 30);
 		enemy3= new Enemy(5, 105);
@@ -279,6 +282,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		{
 			hero.setLocation(hero.getX(), 550);
 		}
+		
 		for(Walls wall: walls)
 		{
 			if(wall.isTouched(hero))
@@ -287,7 +291,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 				{
 					if(hero.getX()<=wall.getX())
 					{
-						hero.setLocation((int)(wall.getX() - 50), hero.getY());
+						hero.setLocation((int)(wall.getX() - 51), hero.getY());
 					}
 					else if(hero.getY() <= wall.getY())
 					{
@@ -295,7 +299,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 					}
 					else if(hero.getX() >= wall.getX())
 					{
-						hero.setLocation((int)(wall.getX() + 25), hero.getY());
+						hero.setLocation((int)(wall.getX() + 26), hero.getY());
 					}
 				}
 				else 
@@ -322,12 +326,12 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 	{
 		for (Enemy enemy: enemies)
 		{
-			for(Bullets bullet : bullets)
+			for(int i = bullets.size()-1; i>=0; i--)
 			{
-				if (enemy.isShot(bullet))
+				if (enemy.isShot(bullets.get(i)))
 				{
 					remove(enemy);
-					remove(bullet);
+					remove(bullets.get(i));
 					enemy.Kill();
 					break;
 				}
@@ -355,6 +359,48 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 			add(gameOver);
 			timer.stop();
 		}
+	}
+	public int checkBullets()
+	{
+		if(bullets.isEmpty()==true)
+		{
+			return 0;
+		}
+
+		for (int i= bullets.size()-1; i>=0; i--)
+		{
+			for(Walls wall: walls)
+			{
+				if(wall.isShot(bullets.get(i)))
+				{
+					remove(bullets.get(i));
+					bullets.remove(bullets.get(i));
+					return 0;
+				}
+			}
+
+		}
+		if(bullets.isEmpty()==true)
+		{
+			return 0;
+		}
+		for (int i= bullets.size()-1; i>=0; i--)
+		{
+			for(Platform platform: platforms)
+			{
+				if(platform.isShot(bullets.get(i)))
+				{
+					remove(bullets.get(i));
+					bullets.remove(bullets.get(i));
+					return 0;
+				}
+			}
+
+		}
+		return 0;		
+		
+		
+		
 	}
 
 	@Override
@@ -387,6 +433,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 			
 		}
 		checkEnemies();
+		checkBullets();
 		if(platform7.isTouched(hero))
 			showAll=true;
 		checkBounds();
@@ -398,32 +445,39 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 			add(gameOver);
 			timer.stop();
 		}
-		
+		onGround=false;
 		for(Platform platform: platforms)
 		{
+			
 			if(platform.isTouched(hero) && yVel >= 0)
 			{
-				if(platform.getY() >= hero.getY() + 60)
+				
+				if(platform.getY() >= hero.getY() + 70)
 				{
 					hero.setY(platform.getY() - 80);
 					onGround = true;
 				}
-				else if(platform.getX() >= hero.getX())
+				else if(platform.getX() >= hero.getX()-5)
+				{
 					hero.setDx(0);
+					hero.setLocation((int)(platform.getX()-55), hero.getY());
+				}
+					
 				else if(platform.getX() <= hero.getX())
 					hero.setDx(0);
 			}
 			else if ((platform.isTouched(hero) && yVel <= 0))
 			{
-				if((platform.getY() + 15 <= hero.getY()) && (platform.getY() + 20 >= hero.getY()))
+				if((platform.getY() + 1 <= hero.getY()) && (platform.getY() + 20 >= hero.getY()))
 				{
 					yVel = 0;
 				}
 					
-			}					
+			}
 		}
 		
-		if(onGround) {
+		if(onGround) 
+		{
 			yVel = 0;
 		}
 		if ((hero.getY() < 550) && !onGround)
@@ -431,6 +485,8 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 			yVel += 1;
 			
 		}
+		if(yVel > 10)
+			yVel=10;
 		hero.setDy(yVel);
 		System.out.println(onGround);
 		checkBounds();
