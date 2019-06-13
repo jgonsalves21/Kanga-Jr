@@ -4,6 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Hero extends JComponent
 		velocity=-2;
 		frames=0;
 	}
+	
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
@@ -64,6 +66,10 @@ public class Hero extends JComponent
 	public void update()
 	{
 		setLocation((int)(getX()+dX), (int)(getY()+dY));
+	}
+	public void legTouched(Rectangle leg)
+	{
+		
 	}
 	public void setY(double d)
 	{

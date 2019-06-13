@@ -163,4 +163,3 @@ public class Master extends JFrame implements ActionListener
 	}
 
 }
-

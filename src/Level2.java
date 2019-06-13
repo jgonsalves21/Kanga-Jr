@@ -77,7 +77,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		timer.start();
 		hero = new Hero();
 		showAll=false;
-		hero.setBounds(0,550,50,80);
+		hero.setBounds(225,10,50,80);
 		add(hero);
 		addPlatform();
 		addEnemy();
@@ -278,9 +278,9 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		{
 				hero.setLocation(hero.getX(),0);
 		}
-		else if(hero.getY() >= 550)
+		else if(hero.getY() >= 600)
 		{
-			hero.setLocation(hero.getX(), 550);
+			hero.setLocation(hero.getX(), 600);
 		}
 		
 		for(Walls wall: walls)
@@ -340,7 +340,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 			{
 				JLabel gameOver = new JLabel("Game Over");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-				gameOver.setBounds(250, 50, 400, 200);
+				gameOver.setBounds(250, 50, 400, 50);
 				add(gameOver);
 				timer.stop();
 			}
@@ -350,14 +350,6 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		{
 			if(!enemies.get(i).lifeStatus())
 				enemies.remove(i);
-		}
-		if(platform9.isTouched(hero) && (enemies.size() <6))
-		{
-			JLabel gameOver = new JLabel("YOU WON!");
-			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(250, 50, 400, 200);
-			add(gameOver);
-			timer.stop();
 		}
 	}
 	public int checkBullets()
@@ -402,6 +394,17 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		
 		
 	}
+	public void checkWin()
+	{
+		if(platform9.isTouched(hero) && enemies.size() <6)
+		{
+			JLabel gameOver = new JLabel("YOU WIN!");
+			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+			gameOver.setBounds(250, 50, 400, 50);
+			add(gameOver);
+			timer.stop();
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
@@ -437,11 +440,12 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		if(platform7.isTouched(hero))
 			showAll=true;
 		checkBounds();
+		checkWin();
 		if(lava.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("Game Over");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(50, 50, 400, 200);
+			gameOver.setBounds(50, 50, 400, 50);
 			add(gameOver);
 			timer.stop();
 		}
@@ -480,7 +484,7 @@ public class Level2 extends Levels implements ActionListener, MouseListener
 		{
 			yVel = 0;
 		}
-		if ((hero.getY() < 550) && !onGround)
+		if ((hero.getY() < 560) && !onGround)
 		{
 			yVel += 1;
 			

@@ -51,7 +51,6 @@ public class KangaIntro extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-	
 		revalidate();
 		repaint();
 		

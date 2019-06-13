@@ -322,7 +322,7 @@ public class Level3 extends Levels implements ActionListener,  MouseListener
 			{
 				JLabel gameOver = new JLabel("Game Over");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-				gameOver.setBounds(250, 50, 400, 200);
+				gameOver.setBounds(250, 50, 400, 50);
 				add(gameOver);
 				timer.stop();
 			}
@@ -372,7 +372,17 @@ public class Level3 extends Levels implements ActionListener,  MouseListener
 
 		}
 		return 0;		
-		
+	}
+	public void checkWin()
+	{
+		if(platform5.isTouched(hero) && enemies.size() <3)
+		{
+			JLabel gameOver = new JLabel("YOU WIN!");
+			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
+			gameOver.setBounds(250, 50, 400, 50);
+			add(gameOver);
+			timer.stop();
+		}
 	}
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -396,6 +406,7 @@ public class Level3 extends Levels implements ActionListener,  MouseListener
 		}
 		checkEnemies();
 		checkBullets();
+		checkWin();
 		if(lava.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("Game Over");
@@ -504,4 +515,3 @@ public class Level3 extends Levels implements ActionListener,  MouseListener
 	
 
 }
-

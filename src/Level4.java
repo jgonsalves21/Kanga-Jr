@@ -15,7 +15,7 @@ import javax.swing.Timer;
 public class Level4  extends Levels implements ActionListener
 {
 
-	private Platform safeFloor;
+	private Rectangle safeFloor;
 	private Lava lava1;
 	private Lava lava2;
 	private Platform platform1;
@@ -25,7 +25,6 @@ public class Level4  extends Levels implements ActionListener
 	private Platform platform5;
 	private Platform platform6;
 	private Platform platform7;
-	private Platform platform8;
 	private Timer timer;
 	private boolean showAll;
 	private Hero hero;
@@ -56,7 +55,7 @@ public class Level4  extends Levels implements ActionListener
 		timer.start();
 		hero = new Hero();
 		showAll=false;
-		hero.setBounds(0,50,50,80);
+		hero.setBounds(0,550,50,80);
 		add(hero);
 		addPlatform();
 		addEnemy();
@@ -82,7 +81,7 @@ public class Level4  extends Levels implements ActionListener
 	
 	public void addPlatform()
 	{
-		safeFloor = new Platform(0,630, 1280, 90);
+		safeFloor = new Rectangle(0,630, 1280, 90);
 		lava1 = new Lava(300,0,60,370);
 		lava2 = new Lava(300,525,60,160);
 		
@@ -102,7 +101,6 @@ public class Level4  extends Levels implements ActionListener
 		platform5 = new Platform(360,250,50,10);
 		platform6 = new Platform(480,200,50,10);
 		platform7 = new Platform(600,150,50,10);
-		platform8 = new Platform(1180,150,100,10);
 		
 		platforms.add(platform1);
 		platforms.add(platform2);
@@ -111,7 +109,6 @@ public class Level4  extends Levels implements ActionListener
 		platforms.add(platform5);
 		platforms.add(platform6);
 		platforms.add(platform7);
-		platforms.add(platform8);
 	}
 	
 	public void addEnemy()
@@ -162,7 +159,6 @@ public class Level4  extends Levels implements ActionListener
 		g2.fill(platform5);
 		g2.fill(platform6);
 		g2.fill(platform7);
-		g2.fill(platform8);
 		g2.setColor(Color.red);
 		g2.fill(lava1);
 		g2.fill(lava2);
@@ -172,11 +168,11 @@ public class Level4  extends Levels implements ActionListener
 	
 	public void checkWin()
 	{
-		if(platform8.isTouched(hero))
+		//if(platform12.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(100, 0, 400, 200);
+			gameOver.setBounds(250, 0, 400, 200);
 			add(gameOver);
 			timer.stop();
 		}
@@ -234,7 +230,7 @@ public class Level4  extends Levels implements ActionListener
 		}
 		for (int i=enemies.size()-1; i>=0; i--)
 		{
-			if(enemies.get(i).isTouched(hero))
+			if (enemies.get(i).isTouched(hero))
 			{
 				JLabel gameOver = new JLabel("Game Over");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
