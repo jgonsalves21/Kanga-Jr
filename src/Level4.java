@@ -154,6 +154,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		platforms.add(platform5);
 		platforms.add(platform6);
 		platforms.add(platform7);
+		platforms.add(platform8);
 		platforms.add(safeFloor);
 	}
 	
