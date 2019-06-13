@@ -26,6 +26,8 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	private Platform safeFloor;
 	private Lava lava1;
 	private Lava lava2;
+	private Lava lava3;
+	private Lava lava4;
 	private Platform platform1;
 	private Platform platform2;
 	private Platform platform3;
@@ -33,6 +35,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	private Platform platform5;
 	private Platform platform6;
 	private Platform platform7;
+	private Platform platform8;
 	private Timer timer;
 	private boolean showAll;
 	private Hero hero;
@@ -42,6 +45,8 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	private Walls wall4;
 	private Enemy enemy1;
 	private Enemy enemy2;
+	private Enemy enemy3;
+	private int num1;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<Bullets> bullets = new ArrayList<Bullets>();
@@ -121,11 +126,13 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	{
 		safeFloor = new Platform(0,630, 1280, 90);
 		lava1 = new Lava(300,0,60,370);
-		lava2 = new Lava(300,525,60,160);
+		lava2 = new Lava(300,550,60,160);
+		lava3 = new Lava(800,0,75,500);
+		lava4 = new Lava(1025,200,75,600);
 		
 		wall1 = new Walls(650,150,30,530);
 		wall2 = new Walls(360,0,10,370);
-		wall3 = new Walls(360,525,10,160);
+		wall3 = new Walls(360,550,10,160);
 		wall4 = new Walls(500,360,10,150);
 		walls.add(wall1);
 		walls.add(wall2);
@@ -139,7 +146,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		platform5 = new Platform(360,250,50,10);
 		platform6 = new Platform(480,200,50,10);
 		platform7 = new Platform(600,150,50,10);
-		
+		platform8 = new Platform(1025,650,50,10);
 		platforms.add(platform1);
 		platforms.add(platform2);
 		platforms.add(platform3);
@@ -148,6 +155,19 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		platforms.add(platform6);
 		platforms.add(platform7);
 		platforms.add(safeFloor);
+	}
+	
+	
+	public void movePlatform(Platform platform)
+	{
+		platform.setBounds(1075,650,50,5);
+		if (platform.getY() > 650)
+			num1=-1;
+		if(platform.getY() <200)
+			num1=1;
+		if (num1==1)
+			platform.setDy(5);
+		else platform.setDy(-5);
 	}
 	
 	public void addEnemy()
@@ -160,9 +180,13 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		enemy2.setBounds(420,320,24,30);
 		add(enemy2);
 		
+		enemy3 = new Enemy(700,900);
+		enemy3.setBounds(800,580,24,30);
+		add(enemy3);
+		
 		enemies.add(enemy1);
 		enemies.add(enemy2);
-		
+		enemies.add(enemy3);
 	}
 	
 	public void moveEnemy(Enemy enemy)
@@ -178,10 +202,14 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	
 	public void updateEnemy()
 	{
+		movePlatform(platform8);
+		platform8.update();
 		moveEnemy(enemy1);
 		enemy1.update();
 		moveEnemy(enemy2);
 		enemy2.update();
+		moveEnemy(enemy3);
+		enemy3.update();
 	}
 	public void paintComponent(Graphics g)
 	{
@@ -201,10 +229,12 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		g2.fill(platform5);
 		g2.fill(platform6);
 		g2.fill(platform7);
+		g2.fill(platform8);
 		g2.setColor(Color.red);
 		g2.fill(lava1);
 		g2.fill(lava2);
-		
+		g2.fill(lava3);
+		g2.fill(lava4);
 	
 	}
 	
@@ -214,7 +244,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(250, 0, 400, 200);
+			gameOver.setBounds(0, 50, 400, 200);
 			add(gameOver);
 			timer.stop();
 		}
@@ -297,7 +327,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 			{
 				JLabel gameOver = new JLabel("Game Over");
 				gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-				gameOver.setBounds(250, 50, 400, 50);
+				gameOver.setBounds(0, 50, 400, 50);
 				add(gameOver);
 				timer.stop();
 			}
@@ -352,6 +382,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
+		movePlatform(platform8);
 		checkBounds();
 		updateEnemy();
 		
@@ -367,7 +398,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		{
 			JLabel gameOver = new JLabel("Game Over");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
-			gameOver.setBounds(250, 50, 400, 50);
+			gameOver.setBounds(0, 50, 400, 50);
 			add(gameOver);
 			timer.stop();
 		}
@@ -464,4 +495,3 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		
 	}
 }
-
