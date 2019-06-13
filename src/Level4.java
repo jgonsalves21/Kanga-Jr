@@ -36,6 +36,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	private Platform platform6;
 	private Platform platform7;
 	private Platform platform8;
+	private Platform platform9;
 	private Timer timer;
 	private boolean showAll;
 	private Hero hero;
@@ -126,13 +127,13 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	{
 		safeFloor = new Platform(0,630, 1280, 90);
 		lava1 = new Lava(300,0,60,370);
-		lava2 = new Lava(300,550,60,160);
+		lava2 = new Lava(300,570,60,160);
 		lava3 = new Lava(800,0,75,500);
 		lava4 = new Lava(1025,200,75,600);
 		
 		wall1 = new Walls(650,150,30,530);
 		wall2 = new Walls(360,0,10,370);
-		wall3 = new Walls(360,550,10,160);
+		wall3 = new Walls(360,570,10,160);
 		wall4 = new Walls(500,360,10,150);
 		walls.add(wall1);
 		walls.add(wall2);
@@ -146,7 +147,8 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		platform5 = new Platform(360,250,50,10);
 		platform6 = new Platform(480,200,50,10);
 		platform7 = new Platform(600,150,50,10);
-		platform8 = new Platform(1025,650,50,10);
+		platform8 = new Platform(920,100,50,10);
+		platform9 = new Platform(1100,620,160,10);
 		platforms.add(platform1);
 		platforms.add(platform2);
 		platforms.add(platform3);
@@ -155,16 +157,16 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		platforms.add(platform6);
 		platforms.add(platform7);
 		platforms.add(platform8);
+		platforms.add(platform9);
 		platforms.add(safeFloor);
 	}
 	
 	
 	public void movePlatform(Platform platform)
 	{
-		platform.setBounds(1075,650,50,5);
-		if (platform.getY() > 650)
+		if (platform.getY() > 570)
 			num1=-1;
-		if(platform.getY() <200)
+		if(platform.getY() < 250)
 			num1=1;
 		if (num1==1)
 			platform.setDy(5);
@@ -236,12 +238,13 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 		g2.fill(lava2);
 		g2.fill(lava3);
 		g2.fill(lava4);
-	
-	}
+		g2.setColor(Color.blue);
+		g2.fill(platform9);
+}
 	
 	public void checkWin()
 	{
-		//if(platform1.isTouched(hero))
+		if(platform9.isTouched(hero))
 		{
 			JLabel gameOver = new JLabel("YOU WON!");
 			gameOver.setFont(gameOver.getFont().deriveFont(40.0f));
@@ -383,7 +386,7 @@ public class Level4  extends Levels implements ActionListener, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		movePlatform(platform8);
+		//movePlatform(platform8);
 		checkBounds();
 		updateEnemy();
 		
