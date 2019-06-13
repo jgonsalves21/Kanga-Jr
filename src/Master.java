@@ -48,6 +48,8 @@ public class Master extends JFrame implements ActionListener
 		levels.add(level2);
 		JMenuItem level3 = new JMenuItem("Level 3");
 		levels.add(level3);
+		JMenuItem level4 = new JMenuItem("Level 4");
+		levels.add(level4);
 		JMenuItem level5 = new JMenuItem("Level 5");
 		levels.add(level5);
 		JMenuItem home = new JMenuItem("Home");
@@ -120,6 +122,21 @@ public class Master extends JFrame implements ActionListener
 				
 				cl.show(overall, "level 3");
 				add(overall);
+				
+			}
+			
+		});
+		level4.addActionListener(new ActionListener() 
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				Level4 lvl4 = new Level4();
+				overall.add(lvl4, "level 4");
+				cl.show(overall, "level 4");
+				add(overall);
+				
 				
 			}
 			
